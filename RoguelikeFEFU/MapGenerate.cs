@@ -18,8 +18,8 @@ namespace RoguelikeFEFU
         public int width = 100;
         public int height = 50;
         public int minRoomSize = 5; 
-        public int maxRoomSize = 10; 
-        public int maxRooms = 12; 
+        public int maxRoomSize = 14; 
+        public int maxRooms = 7; 
         public List<Rectangle> rooms = new List<Rectangle>(); 
         public int[,] map;
 
@@ -80,22 +80,50 @@ namespace RoguelikeFEFU
                 {
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
-                        map[x, firstRoomCenterY] = 3;
+                        if (map[x, firstRoomCenterY] == 2)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[x, firstRoomCenterY] = 3;
+                        }
                     }
                     for (int y = Math.Min(firstRoomCenterY, secondRoomCenterY); y <= Math.Max(firstRoomCenterY, secondRoomCenterY); y++)
                     {
-                        map[secondRoomCenterX, y] = 3;
+                        if (map[secondRoomCenterX, y] == 2)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[secondRoomCenterX, y] = 3;
+                        }
                     }
                 }
                 else
                 {
                     for (int y = Math.Min(firstRoomCenterY, secondRoomCenterY); y <= Math.Max(firstRoomCenterY, secondRoomCenterY); y++)
                     {
-                        map[firstRoomCenterX, y] = 3;
+                        if (map[firstRoomCenterX, y] == 2)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[firstRoomCenterX, y] = 3;
+                        }
                     }
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
-                        map[x, secondRoomCenterY] = 3;
+                        if (map[x, secondRoomCenterY] == 2)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[x, secondRoomCenterY] = 3;
+                        }
                     }
                 }
             }
@@ -120,7 +148,7 @@ namespace RoguelikeFEFU
                         Console.Write('.');
                     }
                     else {
-                        Console.Write('*');
+                        Console.Write('+');
                     }
                 }
                 Console.WriteLine();
