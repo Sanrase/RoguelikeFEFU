@@ -10,9 +10,8 @@ namespace RoguelikeFEFU
     {
         public static void Main(string[] args)
         {
-            MapGenerate map = new MapGenerate();
-            map.GenerateMap();
-            map.PrintDungeon();
+
+            Game.Run();
         }
     }
 }
