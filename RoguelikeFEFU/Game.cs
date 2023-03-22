@@ -37,8 +37,7 @@ namespace RoguelikeFEFU
         public static void Draw(MapGenerate map) 
         {
            map.PrintDungeon();
-           /* Console.WriteLine($"Health: {player.Health} / {player.MaxHealth}");
-            Console.WriteLine($"Уровень:{level} "); */
+            
         }
         public static void Update()
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RoguelikeFEFU
 {
-    internal class GameObject
+    public class GameObject
     {
         protected int x = 0;
         protected int y = 0;
@@ -20,7 +20,7 @@ namespace RoguelikeFEFU
         }   
     }
 
-    internal class Entity : GameObject
+    public class Entity : GameObject
     {
         protected int health = 10;
         protected int attack = 1;
@@ -33,13 +33,13 @@ namespace RoguelikeFEFU
             this.defense = defense;
         }
 
-        public override void Move(int dx, int dy)
+        public virtual void Move(int dx, int dy)
         {
             this.x += dx;
             this.y += dy;
         }
     }
-     internal class Persone : Entity
+     public class Persone : Entity
     {
         protected int potion = 3;
         protected int[] inventory = new int[5];
@@ -61,9 +61,15 @@ namespace RoguelikeFEFU
             }
         }
 
-        public virtual void Move()
+        public override void Move(int dx, int dy)
         {
+            ConsoleKeyInfo key = Console.ReadKey();
 
+            switch (key.Key)
+            {
+                case ConsoleKey.W:
+                     
+            }
         }
     }
 }

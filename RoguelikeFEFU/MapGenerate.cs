@@ -7,12 +7,6 @@ using System.Drawing;
 
 namespace RoguelikeFEFU
 {
-    public class Edge
-    {
-        public int X;
-        public int Y;
-        public bool Horizontal;
-    }
     internal class MapGenerate
     {
         public int width = 100;
@@ -23,8 +17,9 @@ namespace RoguelikeFEFU
         public List<Rectangle> rooms = new List<Rectangle>(); 
         public int[,] map;
 
-        public void GenerateMap()
+        public List<Rectangle> GenerateMap()
         {
+            Person player;
             Random rand = new Random();
             map = new int[width, height];
             rooms = new List<Rectangle>();
@@ -127,7 +122,15 @@ namespace RoguelikeFEFU
                     }
                 }
             }
+
+            return rooms;
         }
+
+        public int[,] GetMap()
+        {
+            return map;
+        }
+
 
         public void PrintDungeon()
         {
