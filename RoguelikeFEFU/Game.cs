@@ -11,20 +11,15 @@ namespace RoguelikeFEFU
 
         public static void Run()
         {
+            Person hero;
+            List<Enemy> enemies;
+            MapGenerate map = new MapGenerate();
+            map.GenerateMap();
+            enemies = map.SetEnemy();
+            hero = map.SetHero();
 
 
-            Console.WriteLine("Хотите начать игру? (Y/N)");
-            string input = Console.ReadLine().ToUpper();
-            if (input == "Y")
-            {
-                MapGenerate map = new MapGenerate();
-                map.GenerateMap();
-                Draw(map);
-
-            } else
-            {
-                Environment.Exit(0);
-            }
+            Draw(map);
 
             while (true)
             {
