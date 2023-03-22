@@ -4,31 +4,57 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using Lucene.Net.Util;
 
 namespace RoguelikeFEFU
 {
     internal class MapGenerate
     {
-        public int width = 100;
-        public int height = 50;
-        public int minRoomSize = 5; 
-        public int maxRoomSize = 14; 
-        public int maxRooms = 7; 
-        public List<Rectangle> rooms = new List<Rectangle>(); 
-        public int[,] map;
+        private int width;
+        private int heigth;
+        private int minRoomSize; 
+        private int maxRoomSize; 
+        private int maxRooms;
+        private int maxEnemyMap = 10;
+        private int level = 1;
+        private List<Rectangle> rooms = new List<Rectangle>(); 
+        private char[,] map;
+        private List<Enemy> enemies = new List<Enemy>();
+        public Person hero;
 
-        public List<Rectangle> GenerateMap()
+        public MapGenerate(int width = 100, int height = 50, int minRoomSize = 5, int maxRoomSize = 14, int maxRooms = 7)
         {
-            Person player;
+            this.width = width;
+            this.heigth = height;
+            this.minRoomSize = minRoomSize;
+            this.maxRoomSize = maxRoomSize;
+            this.maxRooms = maxRooms;
+        }
+
+        private void FillMap()
+        {
+            for(int x = 0; x < width; x++)
+            {
+                for(int y = 0; y < heigth; y++)
+                {
+                    map[x, y] = ' ';
+                }
+            }
+        }
+
+        public void GenerateMap()
+        {
             Random rand = new Random();
-            map = new int[width, height];
+            map = new char[width, heigth];
             rooms = new List<Rectangle>();
+            this.FillMap();
+
             for (int i = 0; i < maxRooms; i++)
             {
                 int roomWidth = rand.Next(minRoomSize, maxRoomSize + 1);
                 int roomHeight = rand.Next(minRoomSize, maxRoomSize + 1);
                 int roomX = rand.Next(1, width - roomWidth - 1); 
-                int roomY = rand.Next(1, height - roomHeight - 1);
+                int roomY = rand.Next(1, heigth - roomHeight - 1);
 
                 Rectangle newRoom = new Rectangle(roomX, roomY, roomWidth, roomHeight);
                 bool roomIntersects = false;
@@ -48,17 +74,13 @@ namespace RoguelikeFEFU
                     {
                         for (int y = newRoom.Top; y < newRoom.Bottom; y++)
                         {
-                            if (x > newRoom.Left && x < newRoom.Right && y > newRoom.Top && newRoom.Bottom < y)
+                            if (x == newRoom.Left || x == newRoom.Right - 1 || y == newRoom.Top || y == newRoom.Bottom - 1)
                             {
-                                map[x, y] = 0;
-                            }
-                            else if (x == newRoom.Left || x == newRoom.Right - 1 || y == newRoom.Top || y == newRoom.Bottom - 1)
-                            {
-                                map[x, y] = 1;
+                                map[x, y] = '#';
                             }
                             else
                             {
-                                map[x, y] = 2;
+                                map[x, y] = '.';
                             }
                         }
                     }
@@ -75,24 +97,24 @@ namespace RoguelikeFEFU
                 {
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
-                        if (map[x, firstRoomCenterY] == 2)
+                        if (map[x, firstRoomCenterY] == '.')
                         {
                             continue;
                         }
                         else
                         {
-                            map[x, firstRoomCenterY] = 3;
+                            map[x, firstRoomCenterY] = '+';
                         }
                     }
                     for (int y = Math.Min(firstRoomCenterY, secondRoomCenterY); y <= Math.Max(firstRoomCenterY, secondRoomCenterY); y++)
                     {
-                        if (map[secondRoomCenterX, y] == 2)
+                        if (map[secondRoomCenterX, y] == '.')
                         {
                             continue;
                         }
                         else
                         {
-                            map[secondRoomCenterX, y] = 3;
+                            map[secondRoomCenterX, y] = '+';
                         }
                     }
                 }
@@ -100,64 +122,73 @@ namespace RoguelikeFEFU
                 {
                     for (int y = Math.Min(firstRoomCenterY, secondRoomCenterY); y <= Math.Max(firstRoomCenterY, secondRoomCenterY); y++)
                     {
-                        if (map[firstRoomCenterX, y] == 2)
+                        if (map[firstRoomCenterX, y] == '.')
                         {
                             continue;
                         }
                         else
                         {
-                            map[firstRoomCenterX, y] = 3;
+                            map[firstRoomCenterX, y] = '+';
                         }
                     }
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
-                        if (map[x, secondRoomCenterY] == 2)
+                        if (map[x, secondRoomCenterY] == '.')
                         {
                             continue;
                         }
                         else
                         {
-                            map[x, secondRoomCenterY] = 3;
+                            map[x, secondRoomCenterY] = '+';
                         }
                     }
                 }
             }
-
-            return rooms;
         }
 
-        public int[,] GetMap()
+        public List<Enemy> SetEnemy()
         {
-            return map;
-        }
+            Random rand = new Random();
+            int countEnemyRoom = rand.Next(1, 3);
 
+            for(int i = 1; i < rooms.Count; i++)
+            {
+                int enemySpawnX = rand.Next(rooms[i].Left + 1, rooms[i].Right - 1);
+                int enemySpawnY = rand.Next(rooms[i].Top + 1, rooms[i].Bottom - 1);
+                for (int j = 0; j < countEnemyRoom; j++)
+                {
+                    Enemy enemy = new Enemy(enemySpawnX, enemySpawnY, ConsoleColor.Blue);
+                    enemies.Add(enemy);
+                    map[enemySpawnX, enemySpawnY] = enemy.Symbol;
+                }
+            }
+
+            return enemies;
+        }
+        
+        public Person SetHero()
+        {
+            int heroSpawnX = (rooms[0].Left + rooms[0].Width / 2);
+            int heroSpawnY = (rooms[0].Top + rooms[0].Height / 2);
+
+            hero = new Person(heroSpawnX, heroSpawnY, ConsoleColor.Red);
+            map[heroSpawnX, heroSpawnY] = hero.Symbol;
+
+            return hero;
+
+        }
 
         public void PrintDungeon()
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < heigth; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    if (map[x, y] == 1)
-                    {
-                        Console.Write('#');
-                    }
-                    else if (map[x, y] == 0)
-                    {
-                        Console.Write(' ');
-                    }
-                    else if (map[x, y] == 2)
-                    {
-                        Console.Write('.');
-                    }
-                    else {
-                        Console.Write('+');
-                    }
+                    Console.Write(map[x, y]);
                 }
                 Console.WriteLine();
             }
         }
 
     }
-
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,66 +11,82 @@ namespace RoguelikeFEFU
     {
         protected int x = 0;
         protected int y = 0;
-        protected ConsoleColor color = ConsoleColor.White;
+        public ConsoleColor color;
 
         public GameObject(int x, int y, ConsoleColor color = ConsoleColor.White)
         {
             this.x = x;
             this.y = y;
             this.color = color;
-        }   
+        }
     }
 
     public class Entity : GameObject
     {
-        protected int health = 10;
-        protected int attack = 1;
-        protected int defense = 1;
+        public int Health  { get; set;}
+        public int Attack  { get; set;}
+        public int Defense  { get; set; }
 
-        public Entity(int health, int attack, int defense, int x, int y, ConsoleColor color = ConsoleColor.White) : base(x, y, color)
+        public Entity(int x, int y, ConsoleColor color = ConsoleColor.White) : base(x, y, color)
         {
-            this.health = health;
-            this.attack = attack;
-            this.defense = defense;
-        }
-
-        public virtual void Move(int dx, int dy)
-        {
-            this.x += dx;
-            this.y += dy;
+            this.Health = 10;
+            this.Attack = 1;
+            this.Defense = 1;
         }
     }
-     public class Persone : Entity
+    public class Person : Entity
     {
-        protected int potion = 3;
+        public int Potion { get; set; }
         protected int[] inventory = new int[5];
-        public Persone(int health, int attack, int defense, int x, int y, ConsoleColor color) : base(health, attack, defense, x, y, color)
+        public char Symbol { get; set; }
+        public Person(int x, int y, ConsoleColor color) : base(x, y, color)
         {
-
+            this.Symbol = '@';
+            this.Potion = 3;
         }
 
         public void Heal()
         {
-            if (this.potion > 0)
+            if (this.Potion > 0)
             {
-                this.health = 10;
-                this.potion -= 1;
+                this.Health = 10;
+                this.Potion -= 1;
             }
             else
             {
-                this.health -= 1;
+                this.Health -= 1;
             }
         }
 
-        public override void Move(int dx, int dy)
-        {
-            ConsoleKeyInfo key = Console.ReadKey();
+        //public void Move(int x, int y, int[,] map)
+        //{
+        //    ConsoleKeyInfo key = Console.ReadKey();
 
-            switch (key.Key)
-            {
-                case ConsoleKey.W:
-                     
-            }
+        //    switch (key)
+        //    {
+
+        //        case key.Key == ConsoleKey.W:
+
+        //    }
+        //}
+
+        public void Attack()
+        {
+
+        }
+
+    }
+
+    internal class Enemy : Entity
+    {
+        public char Symbol { get; set; }
+        public Enemy(int x, int y, ConsoleColor color) : base(x, y, color)
+        {
+            this.Health = 13;
+            this.Attack = 3;
+            this.Defense = 0;
+            this.Symbol = 'S';
         }
     }
+
 }
