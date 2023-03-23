@@ -9,25 +9,23 @@ namespace RoguelikeFEFU
 {
     public class GameObject
     {
-        protected int x = 0;
-        protected int y = 0;
-        public ConsoleColor color;
+        public int X { get; set; }
+        public int Y { get; set; }
 
-        public GameObject(int x, int y, ConsoleColor color = ConsoleColor.White)
+        public GameObject(int x, int y)
         {
-            this.x = x;
-            this.y = y;
-            this.color = color;
+            this.X = x;
+            this.Y = y;
         }
     }
 
     public class Entity : GameObject
     {
-        public int Health  { get; set;}
-        public int Attack  { get; set;}
+        public int Health  { get; set; }
+        public int Attack  { get; set; }
         public int Defense  { get; set; }
 
-        public Entity(int x, int y, ConsoleColor color = ConsoleColor.White) : base(x, y, color)
+        public Entity(int x, int y, ConsoleColor color = ConsoleColor.White) : base(x, y)
         {
             this.Health = 10;
             this.Attack = 1;
@@ -39,7 +37,7 @@ namespace RoguelikeFEFU
         public int Potion { get; set; }
         protected int[] inventory = new int[5];
         public char Symbol { get; set; }
-        public Person(int x, int y, ConsoleColor color) : base(x, y, color)
+        public Person(int x, int y, ConsoleColor color) : base(x, y)
         {
             this.Symbol = '@';
             this.Potion = 3;
@@ -58,17 +56,9 @@ namespace RoguelikeFEFU
             }
         }
 
-        //public void Move(int x, int y, int[,] map)
-        //{
-        //    ConsoleKeyInfo key = Console.ReadKey();
-
-        //    switch (key)
-        //    {
-
-        //        case key.Key == ConsoleKey.W:
-
-        //    }
-        //}
+        public void Move()
+        {
+        }
 
         public void Attack()
         {
@@ -80,7 +70,7 @@ namespace RoguelikeFEFU
     internal class Enemy : Entity
     {
         public char Symbol { get; set; }
-        public Enemy(int x, int y, ConsoleColor color) : base(x, y, color)
+        public Enemy(int x, int y, ConsoleColor color) : base(x, y)
         {
             this.Health = 13;
             this.Attack = 3;
