@@ -23,7 +23,7 @@ namespace RoguelikeFEFU
         private List<Enemy> enemies = new List<Enemy>();
         public Person hero;
 
-        public MapGenerate(int width = 40, int height = 40, int minRoomSize = 5, int maxRoomSize = 14, int maxRooms = 7)
+        public MapGenerate(int width = 100, int height = 50, int minRoomSize = 5, int maxRoomSize = 14, int maxRooms = 10)
         {
             this.width = width;
             this.heigth = height;
@@ -98,22 +98,50 @@ namespace RoguelikeFEFU
                 {
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
-                        map[x, firstRoomCenterY] = '.';
+                        if (map[x, firstRoomCenterY] == '.')
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[x, firstRoomCenterY] = '+';
+                        }
                     }
                     for (int y = Math.Min(firstRoomCenterY, secondRoomCenterY); y <= Math.Max(firstRoomCenterY, secondRoomCenterY); y++)
                     {
-                        map[secondRoomCenterX, y] = '.';
+                        if (map[secondRoomCenterX, y] == '.')
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[secondRoomCenterX, y] = '+';
+                        }
                     }
                 }
                 else
                 {
                     for (int y = Math.Min(firstRoomCenterY, secondRoomCenterY); y <= Math.Max(firstRoomCenterY, secondRoomCenterY); y++)
                     {
-                        map[firstRoomCenterX, y] = '.';
+                        if (map[firstRoomCenterX, y] == '.')
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[firstRoomCenterX, y] = '+';
+                        }
                     }
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
-                        map[x, secondRoomCenterY] = '.';
+                        if (map[x, secondRoomCenterY] == '.')
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            map[x, secondRoomCenterY] = '+';
+                        }
                     }
                 }
             }
@@ -184,7 +212,7 @@ namespace RoguelikeFEFU
 
         private void SetEnemyPosition(int x, int y, Enemy enemy)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+')
             {
                 return;
             }
@@ -202,6 +230,7 @@ namespace RoguelikeFEFU
             }
         }
 
+        char curr = '.';
         public void PlayerMovement(Person hero)
         {
             int x = hero.X;
@@ -212,37 +241,40 @@ namespace RoguelikeFEFU
             switch (keyInfo.Key)
             {
                 case ConsoleKey.W:
-                    this.SetPlayerPosition(x, y - 1, hero);
+                    curr = this.SetPlayerPosition(x, y - 1, curr, hero);
                     break;
                 case ConsoleKey.A:
-                    this.SetPlayerPosition(x - 1, y, hero);
+                    curr = this.SetPlayerPosition(x - 1, y, curr, hero);
                     break;
                 case ConsoleKey.S:
-                    this.SetPlayerPosition(x, y + 1, hero);
+                    curr = this.SetPlayerPosition(x, y + 1, curr, hero);
                     break;
                 case ConsoleKey.D:
-                    this.SetPlayerPosition(x + 1, y, hero);
+                    curr = this.SetPlayerPosition(x + 1, y, curr, hero);
                     break;
             }
         }
 
-        private void SetPlayerPosition(int x, int y, Person hero)
+        private char SetPlayerPosition(int x, int y, char curr, Person hero)
         {
             if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S')
             {
-                return;
+                return curr;
             }
             else
             {
-                map[hero.X, hero.Y] = '.';
+                map[hero.X, hero.Y] = curr;
                 Console.SetCursorPosition(hero.X, hero.Y);
-                Console.Write('.');
+                Console.Write(curr);
                 hero.X = x;
                 hero.Y = y;
+                curr = map[x, y];
                 map[x, y] = hero.Symbol;
                 Console.SetCursorPosition(hero.X, hero.Y);
                 Console.Write(hero.Symbol);
                 Console.SetCursorPosition(width, heigth);
+
+                return curr;
             }
         }
 
