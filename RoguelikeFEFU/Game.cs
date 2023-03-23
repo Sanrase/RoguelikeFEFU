@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace RoguelikeFEFU
 {
     internal static class Game
@@ -15,33 +16,29 @@ namespace RoguelikeFEFU
             List<Enemy> enemies;
             MapGenerate map = new MapGenerate();
             map.GenerateMap();
-            enemies = map.SetEnemy();
-            hero = map.SetHero();
-
+            enemies = map.GenerateEnemy();
+            hero = map.GeneratePlayer();
 
             Draw(map);
 
             while (true)
             {
-                Update();
+                Update(hero, enemies, map);
             }
 
 
         }
+
 
         public static void Draw(MapGenerate map) 
         {
            map.PrintDungeon();
             
         }
-        public static void Update()
+        public static void Update(Person hero, List<Enemy> enemies, MapGenerate map)
         {
-
-        }
-
-        public static void Player()
-        {
-            
+            map.PlayerMovement(hero);
+            map.EnemiesMovement(enemies);
         }
     }
 }
