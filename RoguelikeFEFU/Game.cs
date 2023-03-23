@@ -16,10 +16,9 @@ namespace RoguelikeFEFU
             List<Enemy> enemies;
             MapGenerate map = new MapGenerate();
             map.GenerateMap();
+            Draw(map);
             enemies = map.GenerateEnemy();
             hero = map.GeneratePlayer();
-
-            Draw(map);
 
             while (true)
             {

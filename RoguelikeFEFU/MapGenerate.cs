@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using Lucene.Net.Util;
-using System.Runtime.CompilerServices;
+using static Lucene.Net.Search.FieldValueHitQueue;
 
 namespace RoguelikeFEFU
 {
@@ -62,7 +61,8 @@ namespace RoguelikeFEFU
 
                 foreach (Rectangle room in rooms)
                 {
-                    if (newRoom.IntersectsWith(room))
+                    Rectangle copyRoom = Rectangle.Inflate(room, 2, 2);
+                    if (newRoom.IntersectsWith(copyRoom))
                     {
                         roomIntersects = true;
                         break;
@@ -88,13 +88,15 @@ namespace RoguelikeFEFU
                 }
 
             }
+
             for (int i = 0; i < rooms.Count - 1; i++)
             {
                 int firstRoomCenterX = (int)(rooms[i].Left + rooms[i].Width / 2);
                 int firstRoomCenterY = (int)(rooms[i].Top + rooms[i].Height / 2);
                 int secondRoomCenterX = (int)(rooms[i + 1].Left + rooms[i + 1].Width / 2);
                 int secondRoomCenterY = (int)(rooms[i + 1].Top + rooms[i + 1].Height / 2);
-                if (new Random().Next(0, 2) == 0) 
+
+                if (new Random().Next(0, 2) == 0)
                 {
                     for (int x = Math.Min(firstRoomCenterX, secondRoomCenterX); x <= Math.Max(firstRoomCenterX, secondRoomCenterX); x++)
                     {
@@ -150,17 +152,35 @@ namespace RoguelikeFEFU
         public List<Enemy> GenerateEnemy()
         {
             Random rand = new Random();
-            int countEnemyRoom = rand.Next(1, 3);
 
             for(int i = 1; i < rooms.Count; i++)
             {
-                int enemySpawnX = rand.Next(rooms[i].Left + 1, rooms[i].Right - 1);
-                int enemySpawnY = rand.Next(rooms[i].Top + 1, rooms[i].Bottom - 1);
+                int countEnemyRoom = rand.Next(0, 3);
                 for (int j = 0; j < countEnemyRoom; j++)
                 {
-                    Enemy enemy = new Enemy(enemySpawnX, enemySpawnY, ConsoleColor.Blue);
-                    enemies.Add(enemy);
-                    map[enemySpawnX, enemySpawnY] = enemy.Symbol;
+                    int enemySpawnX = rand.Next(rooms[i].Left + 1, rooms[i].Right - 1);
+                    int enemySpawnY = rand.Next(rooms[i].Top + 1, rooms[i].Bottom - 1);
+
+                    if (new Random().Next(0, 2) == 0)
+                    {
+                        Snake snake = new Snake(enemySpawnX, enemySpawnY, ConsoleColor.Green);
+                        enemies.Add(snake);
+                        Console.ForegroundColor = snake.Color;
+                        Console.SetCursorPosition(enemySpawnX, enemySpawnY);
+                        Console.Write(snake.Symbol);
+                        Console.ResetColor();
+                        map[enemySpawnX, enemySpawnY] = snake.Symbol;
+                    }
+                    else
+                    {
+                        Kobolt kobolt = new Kobolt(enemySpawnX, enemySpawnY, ConsoleColor.Cyan);
+                        enemies.Add(kobolt);
+                        Console.ForegroundColor = kobolt.Color;
+                        Console.SetCursorPosition(enemySpawnX, enemySpawnY);
+                        Console.Write(kobolt.Symbol);
+                        Console.ResetColor();
+                        map[enemySpawnX, enemySpawnY] = kobolt.Symbol;
+                    }
                 }
             }
 
@@ -172,7 +192,12 @@ namespace RoguelikeFEFU
             int heroSpawnX = (rooms[0].Left + rooms[0].Width / 2);
             int heroSpawnY = (rooms[0].Top + rooms[0].Height / 2);
 
-            hero = new Person(heroSpawnX, heroSpawnY, ConsoleColor.Red);
+            hero = new Person(heroSpawnX, heroSpawnY, ConsoleColor.Blue);
+            Console.SetCursorPosition(heroSpawnX, heroSpawnY);
+            Console.ResetColor();
+            Console.ForegroundColor = hero.Color;
+            Console.Write(hero.Symbol);
+            Console.ResetColor();
             map[heroSpawnX, heroSpawnY] = hero.Symbol;
 
             return hero;
@@ -212,7 +237,7 @@ namespace RoguelikeFEFU
 
         private void SetEnemyPosition(int x, int y, Enemy enemy)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K')
             {
                 return;
             }
@@ -224,8 +249,10 @@ namespace RoguelikeFEFU
                 enemy.X = x;
                 enemy.Y = y;
                 map[x, y] = enemy.Symbol;
+                Console.ForegroundColor = enemy.Color;
                 Console.SetCursorPosition(enemy.X, enemy.Y);
                 Console.Write(enemy.Symbol);
+                Console.ResetColor();
                 Console.SetCursorPosition(width, heigth);
             }
         }
@@ -257,7 +284,7 @@ namespace RoguelikeFEFU
 
         private char SetPlayerPosition(int x, int y, char curr, Person hero)
         {
-            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S')
+            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K')
             {
                 return curr;
             }
@@ -270,9 +297,11 @@ namespace RoguelikeFEFU
                 hero.Y = y;
                 curr = map[x, y];
                 map[x, y] = hero.Symbol;
+                Console.ForegroundColor = hero.Color;
                 Console.SetCursorPosition(hero.X, hero.Y);
                 Console.Write(hero.Symbol);
-                Console.SetCursorPosition(width, heigth);
+                Console.ResetColor();
+                Console.SetCursorPosition(width - 20, heigth);
 
                 return curr;
             }
