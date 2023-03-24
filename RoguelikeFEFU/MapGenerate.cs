@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-using static Lucene.Net.Search.FieldValueHitQueue;
 
 namespace RoguelikeFEFU
 {
@@ -28,6 +27,7 @@ namespace RoguelikeFEFU
             this.heigth = height;
             this.minRoomSize = minRoomSize;
             this.maxRoomSize = maxRoomSize;
+            this.map = new char[width,height];
             this.maxRooms = maxRooms;
         }
 
@@ -256,8 +256,8 @@ namespace RoguelikeFEFU
                 Console.SetCursorPosition(width, heigth);
             }
         }
+        char current = '.';
 
-        char curr = '.';
         public void PlayerMovement(Person hero)
         {
             int x = hero.X;
@@ -268,34 +268,34 @@ namespace RoguelikeFEFU
             switch (keyInfo.Key)
             {
                 case ConsoleKey.W:
-                    curr = this.SetPlayerPosition(x, y - 1, curr, hero);
+                    current = this.SetPlayerPosition(x, y - 1, current, hero);
                     break;
                 case ConsoleKey.A:
-                    curr = this.SetPlayerPosition(x - 1, y, curr, hero);
+                    current = this.SetPlayerPosition(x - 1, y, current, hero);
                     break;
                 case ConsoleKey.S:
-                    curr = this.SetPlayerPosition(x, y + 1, curr, hero);
+                    current = this.SetPlayerPosition(x, y + 1, current, hero);
                     break;
                 case ConsoleKey.D:
-                    curr = this.SetPlayerPosition(x + 1, y, curr, hero);
+                    current = this.SetPlayerPosition(x + 1, y, current, hero);
                     break;
             }
         }
 
-        private char SetPlayerPosition(int x, int y, char curr, Person hero)
+        private char SetPlayerPosition(int x, int y, char current, Person hero)
         {
             if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K')
             {
-                return curr;
+                return current;
             }
             else
             {
-                map[hero.X, hero.Y] = curr;
+                map[hero.X, hero.Y] = current;
                 Console.SetCursorPosition(hero.X, hero.Y);
-                Console.Write(curr);
+                Console.Write(current);
                 hero.X = x;
                 hero.Y = y;
-                curr = map[x, y];
+                current = map[x, y];
                 map[x, y] = hero.Symbol;
                 Console.ForegroundColor = hero.Color;
                 Console.SetCursorPosition(hero.X, hero.Y);
@@ -303,7 +303,7 @@ namespace RoguelikeFEFU
                 Console.ResetColor();
                 Console.SetCursorPosition(width - 20, heigth);
 
-                return curr;
+                return current;
             }
         }
 
