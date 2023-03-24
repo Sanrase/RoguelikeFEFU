@@ -19,10 +19,13 @@ namespace RoguelikeFEFU
             Draw(map);
             enemies = map.GenerateEnemy();
             hero = map.GeneratePlayer();
+            Interface.DrawBox(map.Width, 20, 20);
+            int[,] coords = Interface.Statistics(map.Width, hero);
+            Interface.DynamicStatistics(hero, coords);
 
             while (true)
             {
-                Update(hero, enemies, map);
+                Update(hero, enemies, map, coords);
             }
 
 
@@ -31,12 +34,12 @@ namespace RoguelikeFEFU
 
         public static void Draw(MapGenerate map) 
         {
-           map.PrintDungeon();
-            
+            map.PrintDungeon();
         }
-        public static void Update(Person hero, List<Enemy> enemies, MapGenerate map)
+        public static void Update(Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords)
         {
             map.PlayerMovement(hero);
+            Interface.DynamicStatistics(hero, coords);
             map.EnemiesMovement(enemies);
         }
     }

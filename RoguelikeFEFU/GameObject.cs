@@ -39,12 +39,17 @@ namespace RoguelikeFEFU
     public class Person : Entity
     {
         public int Potion { get; set; }
+        public int Coins { get; set; }
+        public int Level { get; set; }
         protected int[] inventory = new int[5];
         public char Symbol { get; set; }
         public Person(int x, int y, ConsoleColor color) : base(x, y, color)
         {
-            this.Symbol = '@';
-            this.Potion = 3;
+            Symbol = '@';
+            Potion = 3;
+            Coins = 10;
+            Level = 0;
+
         }
 
         public void Heal()

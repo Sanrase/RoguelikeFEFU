@@ -9,8 +9,8 @@ namespace RoguelikeFEFU
 {
     internal class MapGenerate
     {
-        private int width;
-        private int height;
+        public int Width { get; set; }
+        public int Height { get; set; }
         private int minRoomSize; 
         private int maxRoomSize; 
         private int maxRooms;
@@ -21,10 +21,10 @@ namespace RoguelikeFEFU
         private List<Enemy> enemies = new List<Enemy>();
         public Person hero;
 
-        public MapGenerate(int width = 100, int height = 50, int minRoomSize = 5, int maxRoomSize = 14, int maxRooms = 10)
+        public MapGenerate(int width = 50, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 10)
         {
-            this.width = width;
-            this.height = height;
+            Width = width;
+            Height = height;
             this.minRoomSize = minRoomSize;
             this.maxRoomSize = maxRoomSize;
             this.map = new char[width,height];
@@ -33,9 +33,9 @@ namespace RoguelikeFEFU
 
         private void FillMap()
         {
-            for(int x = 0; x < width; x++)
+            for(int x = 0; x < Width; x++)
             {
-                for(int y = 0; y < height; y++)
+                for(int y = 0; y < Height; y++)
                 {
                     map[x, y] = ' ';
                 }
@@ -45,7 +45,7 @@ namespace RoguelikeFEFU
         public void GenerateMap()
         {
             Random rand = new Random();
-            map = new char[width, height];
+            map = new char[Width, Height];
             rooms = new List<Rectangle>();
             this.FillMap();
 
@@ -53,8 +53,8 @@ namespace RoguelikeFEFU
             {
                 int roomWidth = rand.Next(minRoomSize, maxRoomSize + 1);
                 int roomHeight = rand.Next(minRoomSize, maxRoomSize + 1);
-                int roomX = rand.Next(1, width - roomWidth - 1); 
-                int roomY = rand.Next(1, height - roomHeight - 1);
+                int roomX = rand.Next(1, Width - roomWidth - 1); 
+                int roomY = rand.Next(1, Height - roomHeight - 1);
 
                 Rectangle newRoom = new Rectangle(roomX, roomY, roomWidth, roomHeight);
                 bool roomIntersects = false;
@@ -253,7 +253,7 @@ namespace RoguelikeFEFU
                 Console.SetCursorPosition(enemy.X, enemy.Y);
                 Console.Write(enemy.Symbol);
                 Console.ResetColor();
-                Console.SetCursorPosition(width, height);
+                Console.SetCursorPosition(1, 1);
             }
         }
         char current = '.';
@@ -301,7 +301,7 @@ namespace RoguelikeFEFU
                 Console.SetCursorPosition(hero.X, hero.Y);
                 Console.Write(hero.Symbol);
                 Console.ResetColor();
-                Console.SetCursorPosition(width - 20, height);
+                Console.SetCursorPosition(Width - 20, Height);
 
                 return current;
             }
@@ -309,9 +309,9 @@ namespace RoguelikeFEFU
 
         public void PrintDungeon()
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < Height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < Width; x++)
                 {
                     Console.Write(map[x, y]);
                 }
