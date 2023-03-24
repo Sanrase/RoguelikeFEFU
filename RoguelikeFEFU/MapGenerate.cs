@@ -10,7 +10,7 @@ namespace RoguelikeFEFU
     internal class MapGenerate
     {
         private int width;
-        private int heigth;
+        private int height;
         private int minRoomSize; 
         private int maxRoomSize; 
         private int maxRooms;
@@ -24,7 +24,7 @@ namespace RoguelikeFEFU
         public MapGenerate(int width = 100, int height = 50, int minRoomSize = 5, int maxRoomSize = 14, int maxRooms = 10)
         {
             this.width = width;
-            this.heigth = height;
+            this.height = height;
             this.minRoomSize = minRoomSize;
             this.maxRoomSize = maxRoomSize;
             this.map = new char[width,height];
@@ -35,7 +35,7 @@ namespace RoguelikeFEFU
         {
             for(int x = 0; x < width; x++)
             {
-                for(int y = 0; y < heigth; y++)
+                for(int y = 0; y < height; y++)
                 {
                     map[x, y] = ' ';
                 }
@@ -45,7 +45,7 @@ namespace RoguelikeFEFU
         public void GenerateMap()
         {
             Random rand = new Random();
-            map = new char[width, heigth];
+            map = new char[width, height];
             rooms = new List<Rectangle>();
             this.FillMap();
 
@@ -54,7 +54,7 @@ namespace RoguelikeFEFU
                 int roomWidth = rand.Next(minRoomSize, maxRoomSize + 1);
                 int roomHeight = rand.Next(minRoomSize, maxRoomSize + 1);
                 int roomX = rand.Next(1, width - roomWidth - 1); 
-                int roomY = rand.Next(1, heigth - roomHeight - 1);
+                int roomY = rand.Next(1, height - roomHeight - 1);
 
                 Rectangle newRoom = new Rectangle(roomX, roomY, roomWidth, roomHeight);
                 bool roomIntersects = false;
@@ -253,7 +253,7 @@ namespace RoguelikeFEFU
                 Console.SetCursorPosition(enemy.X, enemy.Y);
                 Console.Write(enemy.Symbol);
                 Console.ResetColor();
-                Console.SetCursorPosition(width, heigth);
+                Console.SetCursorPosition(width, height);
             }
         }
         char current = '.';
@@ -301,7 +301,7 @@ namespace RoguelikeFEFU
                 Console.SetCursorPosition(hero.X, hero.Y);
                 Console.Write(hero.Symbol);
                 Console.ResetColor();
-                Console.SetCursorPosition(width - 20, heigth);
+                Console.SetCursorPosition(width - 20, height);
 
                 return current;
             }
@@ -309,7 +309,7 @@ namespace RoguelikeFEFU
 
         public void PrintDungeon()
         {
-            for (int y = 0; y < heigth; y++)
+            for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
