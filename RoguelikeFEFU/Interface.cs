@@ -103,9 +103,8 @@ namespace RoguelikeFEFU
             return coords;
         }
 
-        public static void DrawBox(int x, int width, int height)
+        public static void DrawBox(int x, int y, int width, int height)
         {
-            int y = 13;
             x += 4;
             Console.SetCursorPosition(x, y);
             Console.Write("╔");
@@ -134,6 +133,11 @@ namespace RoguelikeFEFU
             }
             Console.SetCursorPosition(x + width - 1, y + height - 1);
             Console.Write("╝");
+        }
+
+        public static void DrawMenuShop(int x, int y)
+        {
+
         }
 
         public static void Add(int[,] coords, int i, int x, int y)

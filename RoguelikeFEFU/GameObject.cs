@@ -61,31 +61,9 @@ namespace RoguelikeFEFU
 
         public int Kills { get; set; }
 
-        private int coins;
-        public int Coins
-        {
-            get
-            {
-                return this.coins;
-            }
+        public int Coins { get; set; }
 
-            set
-            {
-                this.coins += value;
-            }
-        }
-        private int level = 1;
-        public int Level 
-        {
-            get
-            {
-                return this.level;
-            }
-            set 
-            {
-                this.level += value;
-            }
-        }
+        public int Level { get; set; }
 
         protected int[] inventory = new int[5];
         public char Symbol { get; set; }
@@ -93,7 +71,8 @@ namespace RoguelikeFEFU
         {
             Symbol = '@';
             Potion = 3;
-            this.coins = 0;
+            Coins = 0;
+            Level = 1;
             Damage = 5;
             Kills = 0;
         }
@@ -147,13 +126,29 @@ namespace RoguelikeFEFU
             MinCoin = 1;
         }
     }
+    
+    internal class Trader : GameObject
+    {
+        public char Symbol { get; set; }
+        public Trader(int x, int y, ConsoleColor color) : base(x, y, color) { Symbol = 'T'; }
+
+        public void BayHeal(Person hero)
+        {
+            hero.Potion = hero.Potion + 1;
+        }
+
+        public void BayDamage(Person hero)
+        {
+            hero.Damage = hero.Damage + 1;
+        }
+    }
 
     internal class Teleporter : Entity
     {
         public char Symbol { get; set; }
         public Teleporter(int x, int y, ConsoleColor color) : base(x, y, color)
         {
-            Symbol = 'T';
+            Symbol = '*';
         }
     }
 }

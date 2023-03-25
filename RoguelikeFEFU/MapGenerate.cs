@@ -204,16 +204,8 @@ namespace RoguelikeFEFU
 
         public Teleporter GenerateTeleporter()
         {
-            Random rand = new Random();
-
-            int teleporterSpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
-            int teleporterSpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
-
-            while (map[teleporterSpawnX, teleporterSpawnY] != '.')
-            {
-                teleporterSpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
-                teleporterSpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
-            }
+            int teleporterSpawnX = rooms[rooms.Count - 1].Left + rooms[rooms.Count - 1].Width / 2;
+            int teleporterSpawnY = rooms[rooms.Count - 1].Top + rooms[rooms.Count - 1].Height / 2;
 
 
             teleporter = new Teleporter(teleporterSpawnX, teleporterSpawnY, ConsoleColor.Red);
@@ -226,23 +218,24 @@ namespace RoguelikeFEFU
             return teleporter;
         }
 
-        //public Trader GenerateTrader( List<Rectangle> rooms)
-        //{
-            
-        //    Random rand = new Random();
-        //    int countRoom = rand.Next(0, rooms.Count);
+        public Trader GenerateTrader()
+        {
 
-        //    int traderSpawnX = rand.Next(rooms[countRoom].Left + 1, rooms[countRoom].Right - 1);
-        //    int traderSpawnY = rand.Next(rooms[countRoom].Top + 1, rooms[countRoom].Bottom - 1);
+            Random rand = new Random();
+            int countRoom = rand.Next(1, rooms.Count);
 
-        //    Console.SetCursorPosition(traderSpawnX, traderSpawnY);
-        //    Console.ForegroundColor = trader.Color;
-        //    Console.Write(trader.Symbol);
-        //    Console.ResetColor();
-        //    map[traderSpawnX, traderSpawnY] = hero.Symbol;
+            int traderSpawnX = rooms[countRoom].Left + rooms[countRoom].Width / 2;
+            int traderSpawnY = rooms[countRoom].Top + rooms[countRoom].Height / 2;
 
-        //    return trader;
-        //}
+            Trader trader = new Trader(traderSpawnX, traderSpawnY, ConsoleColor.DarkRed);
+            Console.SetCursorPosition(traderSpawnX, traderSpawnY);
+            Console.ForegroundColor = trader.Color;
+            Console.Write(trader.Symbol);
+            Console.ResetColor();
+            map[traderSpawnX, traderSpawnY] = trader.Symbol;
+
+            return trader;
+        }
 
         public void EnemiesMovement(List<Enemy> enemies)
         {
@@ -277,7 +270,7 @@ namespace RoguelikeFEFU
 
         private void SetEnemyPosition(int x, int y, Enemy enemy)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K' ||  map[x, y] == 'T')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K' ||  map[x, y] == 'T' || map[x, y] == '*')
             {
                 return;
             }
@@ -323,7 +316,7 @@ namespace RoguelikeFEFU
 
         private char SetPlayerPosition(int x, int y, char current, Person hero)
         {
-            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K' || map[x, y] == 'T')
+            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K' || map[x, y] == 'T' || map[x, y] == '*')
             {
                 return current;
             }

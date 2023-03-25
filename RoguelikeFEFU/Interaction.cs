@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using static Lucene.Net.Search.FieldValueHitQueue;
 
 namespace RoguelikeFEFU
 {
@@ -35,17 +36,19 @@ namespace RoguelikeFEFU
             }
         }
 
-        public static void PlayerTeleport(Person hero)
+        public static void PlayerTeleport(Person hero, Teleporter teleporter)
         {   
-            Console.Clear();
-            hero.Level = 1;
-            int height = 50, maxRooms = 10;
-            height += hero.Level * 3;
-            maxRooms += hero.Level;
-            MapGenerate genMap = new MapGenerate(50, height, 5, 9, maxRooms);
+            if(RadiusTeleport(hero, teleporter))
+            {
+                Console.Clear();
+                hero.Level += 1;
+                int height = 50, maxRooms = 10;
+                height += hero.Level * 3;
+                maxRooms += hero.Level;
+                MapGenerate genMap = new MapGenerate(50, height, 5, 9, maxRooms);
 
-            Game.Run(hero, genMap);
-
+                Game.Run(hero, genMap);
+            }
         }
 
         private static Enemy SearchPlayerAttack(Person hero, List<Enemy> enemies)
@@ -89,13 +92,76 @@ namespace RoguelikeFEFU
             map[heroSpawnX, heroSpawnY] = hero.Symbol;
         }
 
+        public static void OpenShop(Person hero, Trader trader, MapGenerate genMap)
+        {
+            if(RadiusTrader(hero, trader))
+            {
+                Console.Clear();
+                ConsoleKey keyInfo = ConsoleKey.C;
+                Interface.DrawBox(4, 4, 40, 20);
+                while (keyInfo != ConsoleKey.E)
+                {
+                    keyInfo = Console.ReadKey(true).Key;
+                    switch (keyInfo)
+                    {
+                        case ConsoleKey.H:
+                            trader.BayHeal(hero);
+                            hero.Coins -= 10;
+                            break;
+                        case ConsoleKey.D:
+                            trader.BayDamage(hero);
+                            hero.Coins -= 20;
+                            break;
+                        case ConsoleKey.E:
+                            Console.Clear();
+                            genMap.PrintDungeon();
+                            Interface.DrawBox(genMap.Width, 13, 20, 20);
+                            int[,] coords = Interface.Statistics(genMap.Width, hero);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static bool RadiusTeleport(Person hero, Teleporter teleporter)
+        {
+            for (int x = hero.X - 1; x <= hero.X + 1; x++)
+            {
+                for (int y = hero.Y - 1; y <= hero.Y + 1; y++)
+                {
+                    if (teleporter.X == x && teleporter.Y == y)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static bool RadiusTrader(Person hero, Trader trader)
+        {
+            for (int x = hero.X - 1; x <= hero.X + 1; x++)
+            {
+                for (int y = hero.Y - 1; y <= hero.Y + 1; y++)
+                {
+                    if (trader.X == x && trader.Y == y)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static void DeadEnemy(Enemy enemy, Person hero, char[,]map)
         {
             Random random = new Random();
             map[enemy.X, enemy.Y] = '.';
             Console.SetCursorPosition(enemy.X, enemy.Y);
             Console.Write('.');
-            hero.Coins = random.Next(enemy.MinCoin, enemy.MaxCoin);
+            hero.Coins += random.Next(enemy.MinCoin, enemy.MaxCoin);
             hero.Kills += 1;
         }
 
