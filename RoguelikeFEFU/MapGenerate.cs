@@ -194,7 +194,6 @@ namespace RoguelikeFEFU
 
             hero = new Person(heroSpawnX, heroSpawnY, ConsoleColor.Blue);
             Console.SetCursorPosition(heroSpawnX, heroSpawnY);
-            Console.ResetColor();
             Console.ForegroundColor = hero.Color;
             Console.Write(hero.Symbol);
             Console.ResetColor();
@@ -203,6 +202,24 @@ namespace RoguelikeFEFU
             return hero;
 
         }
+
+        //public Trader GenerateTrader( List<Rectangle> rooms)
+        //{
+            
+        //    Random rand = new Random();
+        //    int countRoom = rand.Next(0, rooms.Count);
+
+        //    int traderSpawnX = rand.Next(rooms[countRoom].Left + 1, rooms[countRoom].Right - 1);
+        //    int traderSpawnY = rand.Next(rooms[countRoom].Top + 1, rooms[countRoom].Bottom - 1);
+
+        //    Console.SetCursorPosition(traderSpawnX, traderSpawnY);
+        //    Console.ForegroundColor = trader.Color;
+        //    Console.Write(trader.Symbol);
+        //    Console.ResetColor();
+        //    map[traderSpawnX, traderSpawnY] = hero.Symbol;
+
+        //    return trader;
+        //}
 
         public void EnemiesMovement(List<Enemy> enemies)
         {
@@ -258,14 +275,13 @@ namespace RoguelikeFEFU
         }
         char current = '.';
 
-        public void PlayerMovement(Person hero)
+        public void PlayerMovement(Person hero, ConsoleKey key)
         {
             int x = hero.X;
             int y = hero.Y;
             
 
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-            switch (keyInfo.Key)
+            switch (key)
             {
                 case ConsoleKey.W:
                     current = this.SetPlayerPosition(x, y - 1, current, hero);
@@ -307,6 +323,10 @@ namespace RoguelikeFEFU
             }
         }
 
+        public char[,] GetMap()
+        {
+            return map;
+        }
         public void PrintDungeon()
         {
             for (int y = 0; y < Height; y++)

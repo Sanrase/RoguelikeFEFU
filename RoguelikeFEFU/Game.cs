@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+
 namespace RoguelikeFEFU
 {
     internal static class Game
@@ -38,9 +39,26 @@ namespace RoguelikeFEFU
         }
         public static void Update(Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords)
         {
-            map.PlayerMovement(hero);
             Interface.DynamicStatistics(hero, coords);
+            CheckButton(hero, enemies, map);
             map.EnemiesMovement(enemies);
+        }
+
+        public static void CheckButton(Person hero, List<Enemy> enemies, MapGenerate generateMap)
+        {
+            ConsoleKey keyInfo = Console.ReadKey().Key;
+            if(keyInfo == ConsoleKey.E)
+            {
+                Interaction.PlayerAttack(hero, enemies, generateMap.GetMap());
+            }
+            else if(keyInfo == ConsoleKey.W || keyInfo == ConsoleKey.A || keyInfo == ConsoleKey.S || keyInfo == ConsoleKey.D)
+            {
+                generateMap.PlayerMovement(hero, keyInfo);
+            }
+            else if(keyInfo == ConsoleKey.H)
+            {
+                Interaction.PlayerHeal(hero);
+            }
         }
     }
 }
