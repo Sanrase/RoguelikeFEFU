@@ -30,6 +30,8 @@ namespace RoguelikeFEFU
             Console.Write(hero.Potion);
             Console.SetCursorPosition(coords[3, 0], coords[3, 1]);
             Console.Write(hero.Coins);
+            Console.SetCursorPosition(coords[4, 0], coords[4, 1]);
+            Console.Write(hero.Kills);
         }
 
         private static void ClearDynamicStatistic(Person hero, int[,] coords)
@@ -50,6 +52,11 @@ namespace RoguelikeFEFU
                 Console.Write(' ');
             }
             Console.SetCursorPosition(coords[3, 0], coords[3, 1]);
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(' ');
+            }
+            Console.SetCursorPosition(coords[4, 0], coords[4, 1]);
             for (int i = 0; i < 4; i++)
             {
                 Console.Write(' ');
@@ -86,6 +93,12 @@ namespace RoguelikeFEFU
             Console.Write("Монеты: ");
             (left, top) = Console.GetCursorPosition();
             Interface.Add(coords, 3, left, top);
+
+            y += 2;
+            Console.SetCursorPosition(mapWidth, y);
+            Console.Write("Убийств: ");
+            (left, top) = Console.GetCursorPosition();
+            Interface.Add(coords, 4, left, top);
 
             return coords;
         }

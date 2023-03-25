@@ -58,6 +58,8 @@ namespace RoguelikeFEFU
     {
         public int Potion { get; set; }
 
+        public int Kills { get; set; }
+
         private int coins;
         public int Coins
         {
@@ -81,7 +83,7 @@ namespace RoguelikeFEFU
             Potion = 3;
             this.coins = 0;
             Damage = 5;
-
+            Kills = 0;
         }
 
         public void Heal()

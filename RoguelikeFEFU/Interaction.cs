@@ -63,6 +63,12 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(enemy.X, enemy.Y);
             Console.Write('.');
             hero.Coins = random.Next(enemy.MinCoin, enemy.MaxCoin);
+            hero.Kills += 1;
+        }
+
+        public static void SetCursorToPlayer(Person hero)
+        {
+            Console.SetCursorPosition(hero.X, hero.Y);
         }
 
         private static void DeadPlayer(Person hero)

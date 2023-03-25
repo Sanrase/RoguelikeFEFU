@@ -40,13 +40,14 @@ namespace RoguelikeFEFU
         public static void Update(Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords)
         {
             Interface.DynamicStatistics(hero, coords);
+            Interaction.SetCursorToPlayer(hero);
             CheckButton(hero, enemies, map);
             map.EnemiesMovement(enemies);
         }
 
         public static void CheckButton(Person hero, List<Enemy> enemies, MapGenerate generateMap)
         {
-            ConsoleKey keyInfo = Console.ReadKey().Key;
+            ConsoleKey keyInfo = Console.ReadKey(true).Key;
             if(keyInfo == ConsoleKey.E)
             {
                 Interaction.PlayerAttack(hero, enemies, generateMap.GetMap());
