@@ -21,6 +21,7 @@ namespace RoguelikeFEFU
 
         public static void DynamicStatistics(Person hero, int[,] coords)
         {
+            ClearDynamicStatistic(hero, coords);
             Console.SetCursorPosition(coords[0, 0], coords[0, 1]);
             Console.Write(hero.Level);
             Console.SetCursorPosition(coords[1, 0], coords[1, 1]);
@@ -31,6 +32,29 @@ namespace RoguelikeFEFU
             Console.Write(hero.Coins);
         }
 
+        private static void ClearDynamicStatistic(Person hero, int[,] coords)
+        {
+            Console.SetCursorPosition(coords[0, 0], coords[0, 1]);
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(' ');
+            }
+            Console.SetCursorPosition(coords[1, 0], coords[1, 1]);
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(' ');
+            }
+            Console.SetCursorPosition(coords[2, 0], coords[2, 1]);
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(' ');
+            }
+            Console.SetCursorPosition(coords[3, 0], coords[3, 1]);
+            for (int i = 0; i < 4; i++)
+            {
+                Console.Write(' ');
+            }
+        }
         private static int[,] StaticStatistics(int mapWidth, int[,] coords)
         {
             mapWidth += 8;
