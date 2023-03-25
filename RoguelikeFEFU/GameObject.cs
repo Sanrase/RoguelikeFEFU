@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Security;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -73,7 +74,18 @@ namespace RoguelikeFEFU
                 this.coins += value;
             }
         }
-        public int Level { get; set; }
+        private int level = 1;
+        public int Level 
+        {
+            get
+            {
+                return this.level;
+            }
+            set 
+            {
+                this.level += value;
+            }
+        }
 
         protected int[] inventory = new int[5];
         public char Symbol { get; set; }
@@ -136,4 +148,12 @@ namespace RoguelikeFEFU
         }
     }
 
+    internal class Teleporter : Entity
+    {
+        public char Symbol { get; set; }
+        public Teleporter(int x, int y, ConsoleColor color) : base(x, y, color)
+        {
+            Symbol = 'T';
+        }
+    }
 }

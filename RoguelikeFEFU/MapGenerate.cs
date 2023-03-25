@@ -14,12 +14,10 @@ namespace RoguelikeFEFU
         private int minRoomSize; 
         private int maxRoomSize; 
         private int maxRooms;
-        private int maxEnemyMap = 10;
-        private int level = 1;
-        private List<Rectangle> rooms = new List<Rectangle>(); 
+        public List<Rectangle> rooms = new List<Rectangle>(); 
         private char[,] map;
         private List<Enemy> enemies = new List<Enemy>();
-        public Person hero;
+        public Teleporter teleporter;
 
         public MapGenerate(int width = 50, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 10)
         {
@@ -189,6 +187,7 @@ namespace RoguelikeFEFU
         
         public Person GeneratePlayer()
         {
+            Person hero;
             int heroSpawnX = (rooms[0].Left + rooms[0].Width / 2);
             int heroSpawnY = (rooms[0].Top + rooms[0].Height / 2);
 
@@ -201,6 +200,30 @@ namespace RoguelikeFEFU
 
             return hero;
 
+        }
+
+        public Teleporter GenerateTeleporter()
+        {
+            Random rand = new Random();
+
+            int teleporterSpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
+            int teleporterSpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
+
+            while (map[teleporterSpawnX, teleporterSpawnY] != '.')
+            {
+                teleporterSpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
+                teleporterSpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
+            }
+
+
+            teleporter = new Teleporter(teleporterSpawnX, teleporterSpawnY, ConsoleColor.Red);
+            Console.SetCursorPosition(teleporterSpawnX, teleporterSpawnY);
+            Console.ForegroundColor = teleporter.Color;
+            Console.Write(teleporter.Symbol);
+            Console.ResetColor();
+            map[teleporterSpawnX, teleporterSpawnY] = teleporter.Symbol;
+
+            return teleporter;
         }
 
         //public Trader GenerateTrader( List<Rectangle> rooms)
@@ -254,7 +277,7 @@ namespace RoguelikeFEFU
 
         private void SetEnemyPosition(int x, int y, Enemy enemy)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K' ||  map[x, y] == 'T')
             {
                 return;
             }
@@ -300,7 +323,7 @@ namespace RoguelikeFEFU
 
         private char SetPlayerPosition(int x, int y, char current, Person hero)
         {
-            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K')
+            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K' || map[x, y] == 'T')
             {
                 return current;
             }

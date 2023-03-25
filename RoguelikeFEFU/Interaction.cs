@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,13 +19,13 @@ namespace RoguelikeFEFU
                 enemy.Defense(hero.Damage);
                 if(!enemy.IsAlive())
                 {
-                    Interaction.DeadEnemy(enemy, hero, map);
+                    DeadEnemy(enemy, hero, map);
                     enemies.Remove(enemy);
                 }
                 hero.Defense(enemy.Damage);
                 if (!hero.IsAlive())
                 {
-                    Interaction.DeadPlayer(hero);
+                    DeadPlayer(hero);
                     return;
                 }
             }
@@ -31,6 +33,19 @@ namespace RoguelikeFEFU
             {
                 return;
             }
+        }
+
+        public static void PlayerTeleport(Person hero)
+        {   
+            Console.Clear();
+            hero.Level = 1;
+            int height = 50, maxRooms = 10;
+            height += hero.Level * 3;
+            maxRooms += hero.Level;
+            MapGenerate genMap = new MapGenerate(50, height, 5, 9, maxRooms);
+
+            Game.Run(hero, genMap);
+
         }
 
         private static Enemy SearchPlayerAttack(Person hero, List<Enemy> enemies)
@@ -54,6 +69,24 @@ namespace RoguelikeFEFU
             }
 
             return nullEnemy;
+        }
+
+        public static void SetPlayerNewLevel(Person hero, MapGenerate genMap)
+        {
+            Rectangle room = genMap.rooms[0];
+            char[,] map = genMap.GetMap();
+
+            int heroSpawnX = (room.Left + room.Width / 2);
+            int heroSpawnY = (room.Top + room.Height / 2);
+
+            hero.X = heroSpawnX;
+            hero.Y = heroSpawnY;
+
+            Console.SetCursorPosition(heroSpawnX, heroSpawnY);
+            Console.ForegroundColor = hero.Color;
+            Console.Write(hero.Symbol);
+            Console.ResetColor();
+            map[heroSpawnX, heroSpawnY] = hero.Symbol;
         }
 
         private static void DeadEnemy(Enemy enemy, Person hero, char[,]map)
