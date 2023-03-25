@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 namespace RoguelikeFEFU
 {
     internal static class Game
-    {   
-
+    {
         public static void Run()
         {
             Person hero;
             List<Enemy> enemies;
+            Teleporter teleporter;
             MapGenerate map = new MapGenerate();
             map.GenerateMap();
             Draw(map);
             enemies = map.GenerateEnemy();
             hero = map.GeneratePlayer();
+            teleporter = map.GenerateTeleporter();
             Interface.DrawBox(map.Width, 20, 20);
             int[,] coords = Interface.Statistics(map.Width, hero);
             Interface.DynamicStatistics(hero, coords);
@@ -30,6 +31,25 @@ namespace RoguelikeFEFU
             }
 
 
+        }
+
+        public static void Run(Person hero, MapGenerate map)
+        {
+            Teleporter teleporter;
+            List<Enemy> enemies;
+            map.GenerateMap();
+            Draw(map);
+            enemies = map.GenerateEnemy();
+            Interaction.SetPlayerNewLevel(hero, map);
+            teleporter = map.GenerateTeleporter();
+            Interface.DrawBox(map.Width, 20, 20);
+            int[,] coords = Interface.Statistics(map.Width, hero);
+            Interface.DynamicStatistics(hero, coords);
+
+            while (true)
+            {
+                Update(hero, enemies, map, coords);
+            }
         }
 
 
@@ -59,6 +79,10 @@ namespace RoguelikeFEFU
             else if(keyInfo == ConsoleKey.H)
             {
                 Interaction.PlayerHeal(hero);
+            }
+            else if(keyInfo == ConsoleKey.T)
+            {
+                Interaction.PlayerTeleport(hero);
             }
         }
     }
