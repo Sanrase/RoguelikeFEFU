@@ -126,12 +126,37 @@ namespace RoguelikeFEFU
         }
     }
 
+    internal class Trader : GameObject
+    {
+        public char Symbol { get; set; }
+        public Trader(int x, int y, ConsoleColor color) : base(x, y, color) { Symbol = 'T'; }
+
+        public void BayHeal(Person hero)
+        {
+            if(hero.Coins >= 10)
+            {
+                hero.Potion = hero.Potion + 1;
+                hero.Coins -= 10;
+            }
+
+        }
+
+        public void BayDamage(Person hero)
+        {
+            if(hero.Coins >= 20)
+            {
+                hero.Damage = hero.Damage + 1;
+                hero.Coins -= 20;
+            }
+        }
+    }
+
     internal class Teleporter : Entity
     {
         public char Symbol { get; set; }
         public Teleporter(int x, int y, ConsoleColor color) : base(x, y, color)
         {
-            Symbol = 'T';
+            Symbol = '*';
         }
     }
 }
