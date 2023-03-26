@@ -35,17 +35,20 @@ namespace RoguelikeFEFU
             }
         }
 
-        public static void PlayerTeleport(Person hero)
-        {   
-            Console.Clear();
-            hero.Level = 1;
-            int height = 50, maxRooms = 10;
-            height += hero.Level * 3;
-            maxRooms += hero.Level;
-            MapGenerate genMap = new MapGenerate(50, height, 5, 9, maxRooms);
+        public static void PlayerTeleport(Person hero, Teleporter teleporter)
+        {
+            if (RadiusTeleport(hero, teleporter))
+            {
+                Console.Clear();
+                hero.Level += 1;
+                int height = 50, maxRooms = 10, width = 50;
+                height += hero.Level * 3;
+                width += hero.Level * 3;
+                maxRooms += hero.Level;
+                MapGenerate genMap = new MapGenerate(width, height, 5, 9, maxRooms);
 
-            Game.Run(hero, genMap);
-
+                Game.Run(hero, genMap);
+            }
         }
 
         private static Enemy SearchPlayerAttack(Person hero, List<Enemy> enemies)
@@ -82,10 +85,6 @@ namespace RoguelikeFEFU
             hero.X = heroSpawnX;
             hero.Y = heroSpawnY;
 
-            Console.SetCursorPosition(heroSpawnX, heroSpawnY);
-            Console.ForegroundColor = hero.Color;
-            Console.Write(hero.Symbol);
-            Console.ResetColor();
             map[heroSpawnX, heroSpawnY] = hero.Symbol;
         }
 
@@ -93,15 +92,24 @@ namespace RoguelikeFEFU
         {
             Random random = new Random();
             map[enemy.X, enemy.Y] = '.';
-            Console.SetCursorPosition(enemy.X, enemy.Y);
-            Console.Write('.');
-            hero.Coins = random.Next(enemy.MinCoin, enemy.MaxCoin);
+            hero.Coins += random.Next(enemy.MinCoin, enemy.MaxCoin);
             hero.Kills += 1;
         }
 
-        public static void SetCursorToPlayer(Person hero)
+        private static bool RadiusTeleport(Person hero, Teleporter teleporter)
         {
-            Console.SetCursorPosition(hero.X, hero.Y);
+            for (int x = hero.X - 1; x <= hero.X + 1; x++)
+            {
+                for (int y = hero.Y - 1; y <= hero.Y + 1; y++)
+                {
+                    if (teleporter.X == x && teleporter.Y == y)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static void DeadPlayer(Person hero)
