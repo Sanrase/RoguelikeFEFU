@@ -61,31 +61,8 @@ namespace RoguelikeFEFU
 
         public int Kills { get; set; }
 
-        private int coins;
-        public int Coins
-        {
-            get
-            {
-                return this.coins;
-            }
-
-            set
-            {
-                this.coins += value;
-            }
-        }
-        private int level = 1;
-        public int Level 
-        {
-            get
-            {
-                return this.level;
-            }
-            set 
-            {
-                this.level += value;
-            }
-        }
+        public int Coins { get; set; }
+        public int Level { get; set; }
 
         protected int[] inventory = new int[5];
         public char Symbol { get; set; }
@@ -93,7 +70,8 @@ namespace RoguelikeFEFU
         {
             Symbol = '@';
             Potion = 3;
-            this.coins = 0;
+            Coins = 0;
+            Level = 1;
             Damage = 5;
             Kills = 0;
         }

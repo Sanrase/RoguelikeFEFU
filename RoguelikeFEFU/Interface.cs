@@ -32,6 +32,7 @@ namespace RoguelikeFEFU
             Console.Write(hero.Coins);
             Console.SetCursorPosition(coords[4, 0], coords[4, 1]);
             Console.Write(hero.Kills);
+            Console.SetCursorPosition(20, 10);
         }
 
         private static void ClearDynamicStatistic(Person hero, int[,] coords)
@@ -65,7 +66,7 @@ namespace RoguelikeFEFU
         private static int[,] StaticStatistics(int mapWidth, int[,] coords)
         {
             mapWidth += 8;
-            int y = 15;
+            int y = 6;
             Console.SetCursorPosition(mapWidth, y-1);
             Console.Write("Cтатистика:");
 
@@ -105,7 +106,7 @@ namespace RoguelikeFEFU
 
         public static void DrawBox(int x, int width, int height)
         {
-            int y = 13;
+            int y = 4;
             x += 4;
             Console.SetCursorPosition(x, y);
             Console.Write("╔");

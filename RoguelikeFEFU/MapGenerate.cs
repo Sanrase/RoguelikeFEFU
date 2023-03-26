@@ -19,7 +19,7 @@ namespace RoguelikeFEFU
         private List<Enemy> enemies = new List<Enemy>();
         public Teleporter teleporter;
 
-        public MapGenerate(int width = 50, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 10)
+        public MapGenerate(int width = 70, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 10)
         {
             Width = width;
             Height = height;
@@ -45,7 +45,7 @@ namespace RoguelikeFEFU
             Random rand = new Random();
             map = new char[Width, Height];
             rooms = new List<Rectangle>();
-            this.FillMap();
+            FillMap();
 
             for (int i = 0; i < maxRooms; i++)
             {
@@ -163,20 +163,12 @@ namespace RoguelikeFEFU
                     {
                         Snake snake = new Snake(enemySpawnX, enemySpawnY, ConsoleColor.Green);
                         enemies.Add(snake);
-                        Console.ForegroundColor = snake.Color;
-                        Console.SetCursorPosition(enemySpawnX, enemySpawnY);
-                        Console.Write(snake.Symbol);
-                        Console.ResetColor();
                         map[enemySpawnX, enemySpawnY] = snake.Symbol;
                     }
                     else
                     {
                         Kobolt kobolt = new Kobolt(enemySpawnX, enemySpawnY, ConsoleColor.Cyan);
                         enemies.Add(kobolt);
-                        Console.ForegroundColor = kobolt.Color;
-                        Console.SetCursorPosition(enemySpawnX, enemySpawnY);
-                        Console.Write(kobolt.Symbol);
-                        Console.ResetColor();
                         map[enemySpawnX, enemySpawnY] = kobolt.Symbol;
                     }
                 }
@@ -192,10 +184,6 @@ namespace RoguelikeFEFU
             int heroSpawnY = (rooms[0].Top + rooms[0].Height / 2);
 
             hero = new Person(heroSpawnX, heroSpawnY, ConsoleColor.Blue);
-            Console.SetCursorPosition(heroSpawnX, heroSpawnY);
-            Console.ForegroundColor = hero.Color;
-            Console.Write(hero.Symbol);
-            Console.ResetColor();
             map[heroSpawnX, heroSpawnY] = hero.Symbol;
 
             return hero;
@@ -204,23 +192,11 @@ namespace RoguelikeFEFU
 
         public Teleporter GenerateTeleporter()
         {
-            Random rand = new Random();
-
-            int teleporterSpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
-            int teleporterSpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
-
-            while (map[teleporterSpawnX, teleporterSpawnY] != '.')
-            {
-                teleporterSpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
-                teleporterSpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
-            }
+            int teleporterSpawnX = rooms[rooms.Count - 1].Left + rooms[rooms.Count - 1].Width / 2;
+            int teleporterSpawnY = rooms[rooms.Count - 1].Top + rooms[rooms.Count - 1].Height / 2;
 
 
             teleporter = new Teleporter(teleporterSpawnX, teleporterSpawnY, ConsoleColor.Red);
-            Console.SetCursorPosition(teleporterSpawnX, teleporterSpawnY);
-            Console.ForegroundColor = teleporter.Color;
-            Console.Write(teleporter.Symbol);
-            Console.ResetColor();
             map[teleporterSpawnX, teleporterSpawnY] = teleporter.Symbol;
 
             return teleporter;
@@ -284,16 +260,9 @@ namespace RoguelikeFEFU
             else
             {
                 map[enemy.X, enemy.Y] = '.';
-                Console.SetCursorPosition(enemy.X, enemy.Y);
-                Console.Write('.');
                 enemy.X = x;
                 enemy.Y = y;
                 map[x, y] = enemy.Symbol;
-                Console.ForegroundColor = enemy.Color;
-                Console.SetCursorPosition(enemy.X, enemy.Y);
-                Console.Write(enemy.Symbol);
-                Console.ResetColor();
-                Console.SetCursorPosition(1, 1);
             }
         }
         char current = '.';
@@ -330,17 +299,11 @@ namespace RoguelikeFEFU
             else
             {
                 map[hero.X, hero.Y] = current;
-                Console.SetCursorPosition(hero.X, hero.Y);
-                Console.Write(current);
                 hero.X = x;
                 hero.Y = y;
                 current = map[x, y];
                 map[x, y] = hero.Symbol;
-                Console.ForegroundColor = hero.Color;
-                Console.SetCursorPosition(hero.X, hero.Y);
-                Console.Write(hero.Symbol);
-                Console.ResetColor();
-                Console.SetCursorPosition(Width - 20, Height);
+
 
                 return current;
             }
@@ -350,17 +313,67 @@ namespace RoguelikeFEFU
         {
             return map;
         }
-        public void PrintDungeon()
+        public void PrintDungeon(Person hero, Teleporter teleporter)
         {
-            for (int y = 0; y < Height; y++)
+            int setX = 10;
+            int setY = 5;
+            int playerX = 10;
+            int playerY = 5;
+
+            int leftBound = Math.Max(0, hero.X - playerX);
+            int rightBound = Math.Min(Width, hero.X + playerX);
+            int topBound = Math.Max(0, hero.Y - playerY);
+            int bottomBound = Math.Min(Height, hero.Y + playerY);
+            
+            for(int y = topBound; y < bottomBound; y++, setY++)
             {
-                for (int x = 0; x < Width; x++)
+                Console.SetCursorPosition(setX, setY);
+                for (int x = leftBound; x < rightBound; x++)
                 {
-                    Console.Write(map[x, y]);
+                    if (hero.X == x && hero.Y == y)
+                    {
+                        Console.ForegroundColor = hero.Color;
+                        Console.Write(hero.Symbol);
+                        Console.ResetColor();
+                    }else if(teleporter.X == x && teleporter.Y == y)
+                    {
+                        Console.ForegroundColor = teleporter.Color;
+                        Console.Write(teleporter.Symbol);
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        bool inMap = false;
+                        foreach(Enemy enemy in enemies)
+                        {
+                            if (EnemyInMap(enemy, x, y))
+                            {
+                                Console.ForegroundColor = enemy.Color;
+                                Console.Write(enemy.Symbol);
+                                Console.ResetColor();
+                                inMap = true;
+                            }
+                        }
+
+                        if (!inMap)
+                        {
+                            Console.Write(map[x, y]);
+                        }
+                    }
                 }
-                Console.WriteLine();
             }
         }
 
+        private static bool EnemyInMap(Enemy enemy, int x, int y)
+        {
+            if(enemy.X == x && enemy.Y == y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
