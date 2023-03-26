@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using static Lucene.Net.Search.FieldValueHitQueue;
 
 namespace RoguelikeFEFU
 {
@@ -17,13 +18,17 @@ namespace RoguelikeFEFU
             if (enemy.IsEnemy)
             {
                 enemy.Defense(hero.Damage);
-                if(!enemy.IsAlive())
+                if(!enemy.IsAlive)
                 {
                     DeadEnemy(enemy, hero, map);
                     enemies.Remove(enemy);
                 }
-                hero.Defense(enemy.Damage);
-                if (!hero.IsAlive())
+                else
+                {
+                    hero.Defense(enemy.Damage);
+                    Interface.DynamicLine(hero, enemy, enemy.Damage);
+                }
+                if (!hero.IsAlive)
                 {
                     DeadPlayer(hero);
                     return;
@@ -94,8 +99,7 @@ namespace RoguelikeFEFU
             {
                 Console.Clear();
                 ConsoleKey keyInfo = ConsoleKey.C;
-                int[,] coords = new int[1, 2]; 
-                Interface.ShopInterface(hero, coords);
+                Interface.ShopInterface(hero);
                 while (keyInfo != ConsoleKey.E)
                 {
                     keyInfo = Console.ReadKey(true).Key;
@@ -103,11 +107,11 @@ namespace RoguelikeFEFU
                     {
                         case ConsoleKey.H:
                             trader.BayHeal(hero);
-                            Interface.ShopInterface(hero, coords);
+                            Interface.ShopInterface(hero);
                             break;
                         case ConsoleKey.D:
                             trader.BayDamage(hero);
-                            Interface.ShopInterface(hero, coords);
+                            Interface.ShopInterface(hero);
                             break;
                         case ConsoleKey.E:
                             Console.Clear();
@@ -154,18 +158,15 @@ namespace RoguelikeFEFU
         {
             Random random = new Random();
             map[enemy.X, enemy.Y] = '.';
-            hero.Coins += random.Next(enemy.MinCoin, enemy.MaxCoin);
+            int coins = random.Next(enemy.MinCoin, enemy.MaxCoin);
+            hero.Coins += coins;
             hero.Kills += 1;
+            Interface.DynamicLine(coins, hero, enemy);
         }
 
         private static void DeadPlayer(Person hero)
         {
 
-        }
-
-        public static void PlayerHeal(Person hero)
-        {
-            hero.Heal();
         }
     }
 }

@@ -25,7 +25,6 @@ namespace RoguelikeFEFU
             teleporter = map.GenerateTeleporter();
             trader = map.GenerateTrader();
 
-            Draw(map, hero, teleporter, trader);
             int[,] coords = Interface.Statistics(30, hero);
 
             while (true)
@@ -46,8 +45,8 @@ namespace RoguelikeFEFU
             Interaction.SetPlayerNewLevel(hero, map);
             teleporter = map.GenerateTeleporter();
             trader = map.GenerateTrader();
+            Interface.DynamicLineTeleport();
 
-            Draw(map, hero, teleporter, trader);
             int[,] coords = Interface.Statistics(30, hero);
 
             while (true)
@@ -74,22 +73,28 @@ namespace RoguelikeFEFU
             ConsoleKey keyInfo = Console.ReadKey(true).Key;
             if(keyInfo == ConsoleKey.E)
             {
+                Interface.ClearDynamicLine();
                 Interaction.PlayerAttack(hero, enemies, generateMap.GetMap());
             }
             else if(keyInfo == ConsoleKey.W || keyInfo == ConsoleKey.A || keyInfo == ConsoleKey.S || keyInfo == ConsoleKey.D)
             {
+                Interface.ClearDynamicLine();
                 generateMap.PlayerMovement(hero, keyInfo);
             }
             else if(keyInfo == ConsoleKey.H)
             {
-                Interaction.PlayerHeal(hero);
+                Interface.ClearDynamicLine();
+                hero.Heal();
+                Interface.DynamicLineHeal();
             }
             else if(keyInfo == ConsoleKey.T)
             {
+                Interface.ClearDynamicLine();
                 Interaction.PlayerTeleport(hero, teleporter);
             }
             else if (keyInfo == ConsoleKey.M)
             {
+                Interface.ClearDynamicLine();
                 Interaction.OpenShop(hero, trader);
             }
         }

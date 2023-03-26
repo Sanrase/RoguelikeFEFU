@@ -30,27 +30,23 @@ namespace RoguelikeFEFU
     {
         public int Health  { get; set; }
         public int Damage  { get; set; }
+        public bool IsAlive { get; set; }
+
+
 
         public Entity(int x, int y, ConsoleColor color = ConsoleColor.White) : base(x, y, color)
         {
             Health = 10;
             Damage = 1;
+            IsAlive = true;
         }
 
         public void Defense(int damage)
         {
-            this.Health -= damage;
-        }
-
-        public bool IsAlive()
-        {
-            if (Health > 0)
+            Health -= damage;
+            if(Health <= 0)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                IsAlive = false;
             }
         }
 
@@ -88,6 +84,7 @@ namespace RoguelikeFEFU
 
     internal class Enemy : Entity
     {
+        public string Name { get; set; }
         public char Symbol { get; set; }
         public int MinCoin { get; set; }
         public int MaxCoin { get; set; }
@@ -110,7 +107,7 @@ namespace RoguelikeFEFU
             Damage = 1;
             MaxCoin = 7;
             MinCoin = 3;
-            
+            Name = "Kobolt";
         }
     }
 
@@ -123,6 +120,7 @@ namespace RoguelikeFEFU
             Damage = 2;
             MaxCoin = 5;
             MinCoin = 1;
+            Name = "Snake";
         }
     }
 
