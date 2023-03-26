@@ -16,9 +16,10 @@ namespace RoguelikeFEFU
         public static int[,] Statistics(int mapWidth, Person hero)
         {
             int[,] coords = new int[5,2];
-            DrawBox(30, 4, 20, 15);
+            DrawBox(34, 4, 20, 15);
+            coords = StaticStatistics(mapWidth, coords);
             DynamicStatistics(hero, coords);
-            return StaticStatistics(mapWidth, coords);
+            return coords;
         }
 
         public static void DynamicStatistics(Person hero, int[,] coords)
@@ -91,7 +92,6 @@ namespace RoguelikeFEFU
 
         public static void DrawBox(int x, int y, int width, int height)
         {
-            x += 4;
             Console.SetCursorPosition(x, y);
             Console.Write("╔");
             for (int i = 1; i < width - 1; i++)
@@ -121,55 +121,37 @@ namespace RoguelikeFEFU
             Console.Write("╝");
         }
 
-        public static void ShopInterface(Person hero, int[,] coords)
+        public static void ShopInterface(Person hero)
         {
-            int setX = 5;
+            int setX = 15;
             int setY = 5;
             DrawBox(setX, setY, 30, 15);
 
-            ShopStaticInterface(setX, setY, coords);
-            ShopDynamicInterface(hero, coords);
+            ShopStaticInterface(hero, setX, setY);
         }
 
-        private static void ShopDynamicInterface(Person hero, int[,] coords)
+        private static void ShopStaticInterface(Person hero, int setX, int setY)
         {
-            ClearDynamicStatistic(coords, 1);
-
-            Console.SetCursorPosition(coords[0,0], coords[0,1]);
-            Console.Write(hero.Coins);
-            Console.SetCursorPosition(1, 1);
-        }
-
-        private static void ShopStaticInterface(int setX, int setY, int[,] coords)
-        {
-            Console.SetCursorPosition(setX + 15, setY+1);
-            Console.Write("Магазин");
-            setY += 3
-                ;
-            Console.SetCursorPosition(setX + 10, setY);
-            Console.Write("Монеты: ");
-            (int left, int top) = Console.GetCursorPosition();
-            coords[0, 0] = left;
-            coords[0, 1] = top;
-
-
-            setY += 2;
+            Console.SetCursorPosition(setX + 14, setY+1);
+            Console.Write("Лавка");
+            setY += 4;
+    
             Console.SetCursorPosition(setX + 6, setY);
             Console.Write("Тип");
             Console.SetCursorPosition(setX + 15, setY);
             Console.Write("Цена");
-            Console.SetCursorPosition(setX + 23, setY);
-            Console.Write("Кнопка");
 
-            setY += 3;
+            setY += 2;
             
             Console.SetCursorPosition(setX + 6, setY);
-            Console.Write("Зелье     10       H");
+            Console.Write("Зелье     10");
 
             setY += 2;
 
             Console.SetCursorPosition(setX + 6, setY);
-            
+            Console.Write("Урон(+1)  20");
+
+            DynamicLineInShop(hero);
         }
 
         public static void Add(int[,] coords, int i, int x, int y)
@@ -178,5 +160,74 @@ namespace RoguelikeFEFU
             coords[i, 1] = y;
         }
 
+        public static void ClearDynamicLine()
+        {
+            int setY = 21;
+            int setX = 2;
+
+            for (; setY <= 22; setY++)
+            {
+                Console.SetCursorPosition(setX, setY);
+                for (int i = 0; i < 62; i++)
+                {
+                    Console.Write(' ');
+                }
+            }
+        }
+
+        public static void DynamicLine(Person hero, Enemy enemy, int damageGiven)
+        {
+            Console.SetCursorPosition(2, 21);
+
+            Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона. И получили в ответ {damageGiven} урона.");
+        }
+
+        public static void DynamicLine(int coins, Person hero, Enemy enemy)
+        {
+            Console.SetCursorPosition(2, 21);
+            Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона.");
+            Console.SetCursorPosition(2, 22);
+            Console.Write($"Вы убили врага {enemy.Name}. За это вы получили {coins} монет");
+        }
+
+        public static void DynamicLineHeal()
+        {
+            Console.SetCursorPosition(2, 21);
+            Console.Write("Вы выпиваете зелье здоровья.");
+        }
+
+        public static void DynamicLineTeleport()
+        {
+            Console.SetCursorPosition(2, 21);
+            Console.Write("Вы перешли на новый уровень.");
+        }
+        
+        private static void ClearDynamicLineInShop()
+        {
+            int setX = 4;
+            int setY = 21;
+
+            for(int i = 0; i < 4; i++)
+            {
+                Console.SetCursorPosition(setX, setY);
+                for(int j = 0; j < 50; j++)
+                {
+                    Console.Write(' ');
+                }
+                setY++;
+            }
+        }
+        private static void DynamicLineInShop(Person hero)
+        {
+            ClearDynamicLineInShop();
+            Console.SetCursorPosition(4, 21);
+            Console.Write($"Вы входите в лавку. Ваше количество монет: {hero.Coins}");
+            Console.SetCursorPosition(4, 22);
+            Console.Write("Чтобы купить зелье здоровья нажмите (H).");
+            Console.SetCursorPosition(4, 23);
+            Console.Write("Если хотите улучшить свой мечь нажмите (D).");
+            Console.SetCursorPosition(4, 24);
+            Console.Write("чтобы выйти из лавки нажмите (E).");
+        }
     }
 }

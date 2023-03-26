@@ -206,7 +206,7 @@ namespace RoguelikeFEFU
         {
 
             Random rand = new Random();
-            int countRoom = rand.Next(1, rooms.Count);
+            int countRoom = rand.Next(1, rooms.Count - 1);
 
             int traderSpawnX = rooms[countRoom].Left + rooms[countRoom].Width / 2;
             int traderSpawnY = rooms[countRoom].Top + rooms[countRoom].Height / 2;
@@ -250,7 +250,8 @@ namespace RoguelikeFEFU
 
         private void SetEnemyPosition(int x, int y, Enemy enemy)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K' ||  map[x, y] == 'T')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K' 
+                || map[x, y] == 'T' || map[x, y] == '*')
             {
                 return;
             }
@@ -289,7 +290,7 @@ namespace RoguelikeFEFU
 
         private char SetPlayerPosition(int x, int y, char current, Person hero)
         {
-            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K' || map[x, y] == 'T')
+            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K')
             {
                 return current;
             }
