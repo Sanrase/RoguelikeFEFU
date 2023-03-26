@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,19 +16,21 @@ namespace RoguelikeFEFU
             Person hero;
             List<Enemy> enemies;
             Teleporter teleporter;
+            Trader trader;
             MapGenerate map = new MapGenerate();
+
             map.GenerateMap();
             enemies = map.GenerateEnemy();
             hero = map.GeneratePlayer();
             teleporter = map.GenerateTeleporter();
-            Draw(map, hero, teleporter);
-            Interface.DrawBox(30, 20, 15);
+            trader = map.GenerateTrader();
+
+            Draw(map, hero, teleporter, trader);
             int[,] coords = Interface.Statistics(30, hero);
-            Interface.DynamicStatistics(hero, coords);
 
             while (true)
             {
-                Update(hero, enemies, map, coords, teleporter);
+                Update(hero, enemies, map, coords, teleporter, trader);
             }
 
 
@@ -37,36 +40,36 @@ namespace RoguelikeFEFU
         {
             Teleporter teleporter;
             List<Enemy> enemies;
+            Trader trader;
             map.GenerateMap();
             enemies = map.GenerateEnemy();
             Interaction.SetPlayerNewLevel(hero, map);
             teleporter = map.GenerateTeleporter();
+            trader = map.GenerateTrader();
 
-            Draw(map, hero, teleporter);
-            Interface.DrawBox(30, 20, 15);
+            Draw(map, hero, teleporter, trader);
             int[,] coords = Interface.Statistics(30, hero);
-            Interface.DynamicStatistics(hero, coords);
 
             while (true)
             {
-                Update(hero, enemies, map, coords, teleporter);
+                Update(hero, enemies, map, coords, teleporter, trader);
             }
         }
 
 
-        public static void Draw(MapGenerate map, Person hero, Teleporter teleporter) 
+        public static void Draw(MapGenerate map, Person hero, Teleporter teleporter, Trader trader) 
         {
-            map.PrintDungeon(hero, teleporter);
+            map.PrintDungeon(hero, teleporter, trader);
         }
-        public static void Update(Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords, Teleporter teleporter)
+        public static void Update(Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords, Teleporter teleporter, Trader trader)
         {
-            Draw(map, hero, teleporter);
+            Draw(map, hero, teleporter, trader);
             Interface.DynamicStatistics(hero, coords);
-            CheckButton(hero, enemies, map, teleporter);
+            CheckButton(hero, enemies, map, teleporter, trader);
             map.EnemiesMovement(enemies);
         }
 
-        public static void CheckButton(Person hero, List<Enemy> enemies, MapGenerate generateMap, Teleporter teleporter)
+        public static void CheckButton(Person hero, List<Enemy> enemies, MapGenerate generateMap, Teleporter teleporter, Trader trader)
         {
             ConsoleKey keyInfo = Console.ReadKey(true).Key;
             if(keyInfo == ConsoleKey.E)
@@ -84,6 +87,10 @@ namespace RoguelikeFEFU
             else if(keyInfo == ConsoleKey.T)
             {
                 Interaction.PlayerTeleport(hero, teleporter);
+            }
+            else if (keyInfo == ConsoleKey.M)
+            {
+                Interaction.OpenShop(hero, trader);
             }
         }
     }

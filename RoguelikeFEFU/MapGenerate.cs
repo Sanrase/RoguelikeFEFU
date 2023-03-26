@@ -202,23 +202,20 @@ namespace RoguelikeFEFU
             return teleporter;
         }
 
-        //public Trader GenerateTrader( List<Rectangle> rooms)
-        //{
-            
-        //    Random rand = new Random();
-        //    int countRoom = rand.Next(0, rooms.Count);
+        public Trader GenerateTrader()
+        {
 
-        //    int traderSpawnX = rand.Next(rooms[countRoom].Left + 1, rooms[countRoom].Right - 1);
-        //    int traderSpawnY = rand.Next(rooms[countRoom].Top + 1, rooms[countRoom].Bottom - 1);
+            Random rand = new Random();
+            int countRoom = rand.Next(1, rooms.Count);
 
-        //    Console.SetCursorPosition(traderSpawnX, traderSpawnY);
-        //    Console.ForegroundColor = trader.Color;
-        //    Console.Write(trader.Symbol);
-        //    Console.ResetColor();
-        //    map[traderSpawnX, traderSpawnY] = hero.Symbol;
+            int traderSpawnX = rooms[countRoom].Left + rooms[countRoom].Width / 2;
+            int traderSpawnY = rooms[countRoom].Top + rooms[countRoom].Height / 2;
 
-        //    return trader;
-        //}
+            Trader trader = new Trader(traderSpawnX, traderSpawnY, ConsoleColor.DarkRed);
+            map[traderSpawnX, traderSpawnY] = trader.Symbol;
+
+            return trader;
+        }
 
         public void EnemiesMovement(List<Enemy> enemies)
         {
@@ -313,7 +310,7 @@ namespace RoguelikeFEFU
         {
             return map;
         }
-        public void PrintDungeon(Person hero, Teleporter teleporter)
+        public void PrintDungeon(Person hero, Teleporter teleporter, Trader trader)
         {
             int setX = 10;
             int setY = 5;
@@ -339,6 +336,12 @@ namespace RoguelikeFEFU
                     {
                         Console.ForegroundColor = teleporter.Color;
                         Console.Write(teleporter.Symbol);
+                        Console.ResetColor();
+                    }
+                    else if(trader.X == x && trader.Y == y)
+                    {
+                        Console.ForegroundColor = trader.Color;
+                        Console.Write(trader.Symbol);
                         Console.ResetColor();
                     }
                     else

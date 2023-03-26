@@ -88,12 +88,50 @@ namespace RoguelikeFEFU
             map[heroSpawnX, heroSpawnY] = hero.Symbol;
         }
 
-        private static void DeadEnemy(Enemy enemy, Person hero, char[,]map)
+        public static void OpenShop(Person hero, Trader trader)
         {
-            Random random = new Random();
-            map[enemy.X, enemy.Y] = '.';
-            hero.Coins += random.Next(enemy.MinCoin, enemy.MaxCoin);
-            hero.Kills += 1;
+            if (RadiusTrader(hero, trader))
+            {
+                Console.Clear();
+                ConsoleKey keyInfo = ConsoleKey.C;
+                int[,] coords = new int[1, 2]; 
+                Interface.ShopInterface(hero, coords);
+                while (keyInfo != ConsoleKey.E)
+                {
+                    keyInfo = Console.ReadKey(true).Key;
+                    switch (keyInfo)
+                    {
+                        case ConsoleKey.H:
+                            trader.BayHeal(hero);
+                            Interface.ShopInterface(hero, coords);
+                            break;
+                        case ConsoleKey.D:
+                            trader.BayDamage(hero);
+                            Interface.ShopInterface(hero, coords);
+                            break;
+                        case ConsoleKey.E:
+                            Console.Clear();
+                            Interface.Statistics(30, hero);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private static bool RadiusTrader(Person hero, Trader trader)
+        {
+            for (int x = hero.X - 1; x <= hero.X + 1; x++)
+            {
+                for (int y = hero.Y - 1; y <= hero.Y + 1; y++)
+                {
+                    if (trader.X == x && trader.Y == y)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static bool RadiusTeleport(Person hero, Teleporter teleporter)
@@ -110,6 +148,14 @@ namespace RoguelikeFEFU
             }
 
             return false;
+        }
+
+        private static void DeadEnemy(Enemy enemy, Person hero, char[,]map)
+        {
+            Random random = new Random();
+            map[enemy.X, enemy.Y] = '.';
+            hero.Coins += random.Next(enemy.MinCoin, enemy.MaxCoin);
+            hero.Kills += 1;
         }
 
         private static void DeadPlayer(Person hero)

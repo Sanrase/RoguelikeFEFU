@@ -16,12 +16,14 @@ namespace RoguelikeFEFU
         public static int[,] Statistics(int mapWidth, Person hero)
         {
             int[,] coords = new int[5,2];
-            return Interface.StaticStatistics(mapWidth, coords);
+            DrawBox(30, 4, 20, 15);
+            DynamicStatistics(hero, coords);
+            return StaticStatistics(mapWidth, coords);
         }
 
         public static void DynamicStatistics(Person hero, int[,] coords)
         {
-            ClearDynamicStatistic(hero, coords);
+            ClearDynamicStatistic(coords, 5);
             Console.SetCursorPosition(coords[0, 0], coords[0, 1]);
             Console.Write(hero.Level);
             Console.SetCursorPosition(coords[1, 0], coords[1, 1]);
@@ -35,32 +37,15 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(20, 10);
         }
 
-        private static void ClearDynamicStatistic(Person hero, int[,] coords)
+        private static void ClearDynamicStatistic(int[,] coords, int n)
         {
-            Console.SetCursorPosition(coords[0, 0], coords[0, 1]);
-            for (int i = 0; i < 4; i++)
+            for(int i = 0; i < n; i++)
             {
-                Console.Write(' ');
-            }
-            Console.SetCursorPosition(coords[1, 0], coords[1, 1]);
-            for (int i = 0; i < 4; i++)
-            {
-                Console.Write(' ');
-            }
-            Console.SetCursorPosition(coords[2, 0], coords[2, 1]);
-            for (int i = 0; i < 4; i++)
-            {
-                Console.Write(' ');
-            }
-            Console.SetCursorPosition(coords[3, 0], coords[3, 1]);
-            for (int i = 0; i < 4; i++)
-            {
-                Console.Write(' ');
-            }
-            Console.SetCursorPosition(coords[4, 0], coords[4, 1]);
-            for (int i = 0; i < 4; i++)
-            {
-                Console.Write(' ');
+                Console.SetCursorPosition(coords[i, 0], coords[i, 1]);
+                for (int j = 0; j < 4; j++)
+                {
+                    Console.Write(' ');
+                }
             }
         }
         private static int[,] StaticStatistics(int mapWidth, int[,] coords)
@@ -104,9 +89,8 @@ namespace RoguelikeFEFU
             return coords;
         }
 
-        public static void DrawBox(int x, int width, int height)
+        public static void DrawBox(int x, int y, int width, int height)
         {
-            int y = 4;
             x += 4;
             Console.SetCursorPosition(x, y);
             Console.Write("╔");
@@ -135,6 +119,57 @@ namespace RoguelikeFEFU
             }
             Console.SetCursorPosition(x + width - 1, y + height - 1);
             Console.Write("╝");
+        }
+
+        public static void ShopInterface(Person hero, int[,] coords)
+        {
+            int setX = 5;
+            int setY = 5;
+            DrawBox(setX, setY, 30, 15);
+
+            ShopStaticInterface(setX, setY, coords);
+            ShopDynamicInterface(hero, coords);
+        }
+
+        private static void ShopDynamicInterface(Person hero, int[,] coords)
+        {
+            ClearDynamicStatistic(coords, 1);
+
+            Console.SetCursorPosition(coords[0,0], coords[0,1]);
+            Console.Write(hero.Coins);
+            Console.SetCursorPosition(1, 1);
+        }
+
+        private static void ShopStaticInterface(int setX, int setY, int[,] coords)
+        {
+            Console.SetCursorPosition(setX + 15, setY+1);
+            Console.Write("Магазин");
+            setY += 3
+                ;
+            Console.SetCursorPosition(setX + 10, setY);
+            Console.Write("Монеты: ");
+            (int left, int top) = Console.GetCursorPosition();
+            coords[0, 0] = left;
+            coords[0, 1] = top;
+
+
+            setY += 2;
+            Console.SetCursorPosition(setX + 6, setY);
+            Console.Write("Тип");
+            Console.SetCursorPosition(setX + 15, setY);
+            Console.Write("Цена");
+            Console.SetCursorPosition(setX + 23, setY);
+            Console.Write("Кнопка");
+
+            setY += 3;
+            
+            Console.SetCursorPosition(setX + 6, setY);
+            Console.Write("Зелье     10       H");
+
+            setY += 2;
+
+            Console.SetCursorPosition(setX + 6, setY);
+            
         }
 
         public static void Add(int[,] coords, int i, int x, int y)
