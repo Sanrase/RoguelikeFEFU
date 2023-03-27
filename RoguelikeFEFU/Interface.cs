@@ -15,7 +15,7 @@ namespace RoguelikeFEFU
     {
         public static int[,] Statistics(int mapWidth, Person hero)
         {
-            int[,] coords = new int[5,2];
+            int[,] coords = new int[5, 2];
             DrawBox(34, 4, 20, 15);
             coords = StaticStatistics(mapWidth, coords);
             DynamicStatistics(hero, coords);
@@ -40,7 +40,7 @@ namespace RoguelikeFEFU
 
         private static void ClearDynamicStatistic(int[,] coords, int n)
         {
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
                 Console.SetCursorPosition(coords[i, 0], coords[i, 1]);
                 for (int j = 0; j < 4; j++)
@@ -53,7 +53,7 @@ namespace RoguelikeFEFU
         {
             mapWidth += 8;
             int y = 6;
-            Console.SetCursorPosition(mapWidth, y-1);
+            Console.SetCursorPosition(mapWidth, y - 1);
             Console.Write("Cтатистика:");
 
             mapWidth -= 2;
@@ -132,17 +132,17 @@ namespace RoguelikeFEFU
 
         private static void ShopStaticInterface(Person hero, int setX, int setY)
         {
-            Console.SetCursorPosition(setX + 14, setY+1);
+            Console.SetCursorPosition(setX + 14, setY + 1);
             Console.Write("Лавка");
             setY += 4;
-    
+
             Console.SetCursorPosition(setX + 6, setY);
             Console.Write("Тип");
             Console.SetCursorPosition(setX + 15, setY);
             Console.Write("Цена");
 
             setY += 2;
-            
+
             Console.SetCursorPosition(setX + 6, setY);
             Console.Write("Зелье     10");
 
@@ -156,7 +156,7 @@ namespace RoguelikeFEFU
 
         public static void Add(int[,] coords, int i, int x, int y)
         {
-            coords[i,0] = x;
+            coords[i, 0] = x;
             coords[i, 1] = y;
         }
 
@@ -181,6 +181,7 @@ namespace RoguelikeFEFU
             Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона. И получили в ответ {damageGiven} урона.");
             Console.SetCursorPosition(2, 22);
             Console.Write($"У врага {enemy.Name} осталось {enemy.Health} здоровья");
+            Console.SetCursorPosition(0, 0);
         }
 
         public static void DynamicLine(int coins, Person hero, Enemy enemy)
@@ -189,34 +190,44 @@ namespace RoguelikeFEFU
             Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона.");
             Console.SetCursorPosition(2, 22);
             Console.Write($"Вы убили врага {enemy.Name}. За это вы получили {coins} монет");
+            Console.SetCursorPosition(0, 0);
         }
 
         public static void DynamicLineHeal()
         {
             Console.SetCursorPosition(2, 21);
             Console.Write("Вы выпиваете зелье здоровья.");
+            Console.SetCursorPosition(0, 0);
         }
 
         public static void DynamicLineTeleport()
         {
             Console.SetCursorPosition(2, 21);
             Console.Write("Вы перешли на новый уровень.");
+            Console.SetCursorPosition(0, 0);
         }
-        
+
         private static void ClearDynamicLineInShop()
         {
             int setX = 4;
             int setY = 21;
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 Console.SetCursorPosition(setX, setY);
-                for(int j = 0; j < 50; j++)
+                for (int j = 0; j < 50; j++)
                 {
                     Console.Write(' ');
                 }
                 setY++;
             }
+        }
+
+        public static void DynamicLineMenuSettingsButton(Person hero)
+        {
+            Console.SetCursorPosition(35, 23);
+            Console.Write($"{hero.Name} вы не можете войти в настройки во время игры!");
+            Console.SetCursorPosition(0, 0);
         }
         private static void DynamicLineInShop(Person hero)
         {
@@ -229,6 +240,7 @@ namespace RoguelikeFEFU
             Console.Write("Если хотите улучшить свой мечь нажмите (D).");
             Console.SetCursorPosition(4, 24);
             Console.Write("чтобы выйти из лавки нажмите (E).");
+            Console.SetCursorPosition(0, 0);
         }
     }
 }
