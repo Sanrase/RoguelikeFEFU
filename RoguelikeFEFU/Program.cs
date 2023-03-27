@@ -10,7 +10,7 @@ namespace RoguelikeFEFU
     {
         public static void Main(string[] args)
         {
-            Game.Run();
+            MainMenu.MainMenuRun();
         }
     }
 }
