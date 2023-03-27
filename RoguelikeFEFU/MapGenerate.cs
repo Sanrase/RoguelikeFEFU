@@ -18,15 +18,17 @@ namespace RoguelikeFEFU
         private char[,] map;
         private List<Enemy> enemies = new List<Enemy>();
         public Teleporter teleporter;
+        public Settings settings;
 
-        public MapGenerate(int width = 80, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 5)
+        public MapGenerate(Settings settings, int minRoomSize = 5, int maxRoomSize = 9)
         {
-            Width = width;
-            Height = height;
+            this.settings = settings;
+            Width = settings.Width;
+            Height = settings.Height;
             this.minRoomSize = minRoomSize;
             this.maxRoomSize = maxRoomSize;
-            this.map = new char[width,height];
-            this.maxRooms = maxRooms;
+            this.map = new char[settings.Width, settings.Height];
+            this.maxRooms = settings.CountRooms;
         }
 
         private void FillMap()
@@ -163,17 +165,17 @@ namespace RoguelikeFEFU
 
                         if (new Random().Next(0, 2) == 0)
                         {
-                            Snake snake = new Snake(enemySpawnX, enemySpawnY, ConsoleColor.Green);
+                            Snake snake = new Snake(enemySpawnX, enemySpawnY, settings.ColorSnake);
                             snake.Health += hero.Damage / 2;
                             enemies.Add(snake);
                             map[enemySpawnX, enemySpawnY] = snake.Symbol;
                         }
                         else
                         {
-                            Kobolt kobolt = new Kobolt(enemySpawnX, enemySpawnY, ConsoleColor.Cyan);
-                            kobolt.Health += hero.Damage / 2;
-                            enemies.Add(kobolt);
-                            map[enemySpawnX, enemySpawnY] = kobolt.Symbol;
+                            Kobalt kobalt = new Kobalt(enemySpawnX, enemySpawnY, settings.ColorKobalt);
+                            kobalt.Health += hero.Damage / 2;
+                            enemies.Add(kobalt);
+                            map[enemySpawnX, enemySpawnY] = kobalt.Symbol;
                         }
                     }
                 }
@@ -188,7 +190,7 @@ namespace RoguelikeFEFU
             int heroSpawnX = (rooms[0].Left + rooms[0].Width / 2);
             int heroSpawnY = (rooms[0].Top + rooms[0].Height / 2);
 
-            hero = new Person(heroSpawnX, heroSpawnY, ConsoleColor.Blue);
+            hero = new Person(heroSpawnX, heroSpawnY, settings.PlayerColor, settings.PlayerSymbol, settings.PlayerName);
             map[heroSpawnX, heroSpawnY] = hero.Symbol;
 
             return hero;
@@ -279,16 +281,16 @@ namespace RoguelikeFEFU
             switch (key)
             {
                 case ConsoleKey.W:
-                    current = this.SetPlayerPosition(x, y - 1, current, hero);
+                    current = SetPlayerPosition(x, y - 1, current, hero);
                     break;
                 case ConsoleKey.A:
-                    current = this.SetPlayerPosition(x - 1, y, current, hero);
+                    current = SetPlayerPosition(x - 1, y, current, hero);
                     break;
                 case ConsoleKey.S:
-                    current = this.SetPlayerPosition(x, y + 1, current, hero);
+                    current = SetPlayerPosition(x, y + 1, current, hero);
                     break;
                 case ConsoleKey.D:
-                    current = this.SetPlayerPosition(x + 1, y, current, hero);
+                    current = SetPlayerPosition(x + 1, y, current, hero);
                     break;
             }
         }
