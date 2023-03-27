@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
 namespace RoguelikeFEFU
 {
     internal static class Game
     {
         public static void Run(Settings settings)
         {
+            bool gameRun = true;
             Person hero;
             List<Enemy> enemies;
             Teleporter teleporter;
@@ -27,16 +26,16 @@ namespace RoguelikeFEFU
 
             int[,] coords = Interface.Statistics(30, hero);
 
-            while (true)
+            while (gameRun)
             {
-                Update(settings, hero, enemies, map, coords, teleporter, trader);
+                Update(settings, hero, enemies, map, coords, teleporter, trader, ref gameRun);
             }
-
-
         }
 
         public static void Run(Person hero, MapGenerate map, Settings settings)
         {
+            bool gameRun = true;
+            ref bool refGameRun = ref gameRun;
             Teleporter teleporter;
             List<Enemy> enemies;
             Trader trader;
@@ -49,9 +48,9 @@ namespace RoguelikeFEFU
 
             int[,] coords = Interface.Statistics(30, hero);
 
-            while (true)
+            while (gameRun)
             {
-                Update(settings, hero, enemies, map, coords, teleporter, trader);
+                Update(settings, hero, enemies, map, coords, teleporter, trader, ref gameRun);
             }
         }
 
@@ -60,34 +59,35 @@ namespace RoguelikeFEFU
         {
             map.PrintDungeon(hero, teleporter, trader);
         }
-        public static void Update(Settings settings, Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords, Teleporter teleporter, Trader trader)
+
+        public static void Update(Settings settings, Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords, Teleporter teleporter, Trader trader, ref bool gameRun)
         {
             Draw(map, hero, teleporter, trader);
             Interface.DynamicStatistics(hero, coords);
-            CheckButton(settings, hero, enemies, map, teleporter, trader);
+            CheckButton(settings, hero, enemies, map, teleporter, trader, ref gameRun);
             map.EnemiesMovement(enemies);
         }
 
-        public static void CheckButton(Settings settings, Person hero, List<Enemy> enemies, MapGenerate generateMap, Teleporter teleporter, Trader trader)
+        public static void CheckButton(Settings settings, Person hero, List<Enemy> enemies, MapGenerate generateMap, Teleporter teleporter, Trader trader, ref bool gameRun)
         {
             ConsoleKey keyInfo = Console.ReadKey(true).Key;
-            if(keyInfo == ConsoleKey.E)
+            if (keyInfo == ConsoleKey.E)
             {
                 Interface.ClearDynamicLine();
                 Interaction.PlayerAttack(hero, enemies, generateMap.GetMap());
             }
-            else if(keyInfo == ConsoleKey.W || keyInfo == ConsoleKey.A || keyInfo == ConsoleKey.S || keyInfo == ConsoleKey.D)
+            else if (keyInfo == ConsoleKey.W || keyInfo == ConsoleKey.A || keyInfo == ConsoleKey.S || keyInfo == ConsoleKey.D)
             {
                 Interface.ClearDynamicLine();
                 generateMap.PlayerMovement(hero, keyInfo);
             }
-            else if(keyInfo == ConsoleKey.H)
+            else if (keyInfo == ConsoleKey.H)
             {
                 Interface.ClearDynamicLine();
                 hero.Heal();
                 Interface.DynamicLineHeal();
             }
-            else if(keyInfo == ConsoleKey.T)
+            else if (keyInfo == ConsoleKey.T)
             {
                 Interface.ClearDynamicLine();
                 Interaction.PlayerTeleport(settings, hero, teleporter);
@@ -96,6 +96,10 @@ namespace RoguelikeFEFU
             {
                 Interface.ClearDynamicLine();
                 Interaction.OpenShop(hero, trader);
+            }
+            else if (keyInfo == ConsoleKey.Escape)
+            {
+                gameRun = MainMenu.MainMenuRunInGame(hero);
             }
         }
     }

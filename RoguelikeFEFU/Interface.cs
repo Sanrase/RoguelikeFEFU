@@ -181,6 +181,7 @@ namespace RoguelikeFEFU
             Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона. И получили в ответ {damageGiven} урона.");
             Console.SetCursorPosition(2, 22);
             Console.Write($"У врага {enemy.Name} осталось {enemy.Health} здоровья");
+            Console.SetCursorPosition(0, 0);
         }
 
         public static void DynamicLine(int coins, Person hero, Enemy enemy)
@@ -189,18 +190,21 @@ namespace RoguelikeFEFU
             Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона.");
             Console.SetCursorPosition(2, 22);
             Console.Write($"Вы убили врага {enemy.Name}. За это вы получили {coins} монет");
+            Console.SetCursorPosition(0, 0);
         }
 
         public static void DynamicLineHeal()
         {
             Console.SetCursorPosition(2, 21);
             Console.Write("Вы выпиваете зелье здоровья.");
+            Console.SetCursorPosition(0, 0);
         }
 
         public static void DynamicLineTeleport()
         {
             Console.SetCursorPosition(2, 21);
             Console.Write("Вы перешли на новый уровень.");
+            Console.SetCursorPosition(0, 0);
         }
         
         private static void ClearDynamicLineInShop()
@@ -218,6 +222,13 @@ namespace RoguelikeFEFU
                 setY++;
             }
         }
+    
+        public static void DynamicLineMenuSettingsButton(Person hero)
+        {
+            Console.SetCursorPosition(35, 23);
+            Console.Write($"{hero.Name} вы не можете войти в настройки во время игры!");
+            Console.SetCursorPosition(0, 0);
+        }
         private static void DynamicLineInShop(Person hero)
         {
             ClearDynamicLineInShop();
@@ -229,6 +240,7 @@ namespace RoguelikeFEFU
             Console.Write("Если хотите улучшить свой мечь нажмите (D).");
             Console.SetCursorPosition(4, 24);
             Console.Write("чтобы выйти из лавки нажмите (E).");
+            Console.SetCursorPosition(0, 0);
         }
     }
 }
