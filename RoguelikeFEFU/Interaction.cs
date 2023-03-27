@@ -46,7 +46,7 @@ namespace RoguelikeFEFU
             {
                 Console.Clear();
                 hero.Level += 1;
-                int height = 50, maxRooms = 10, width = 50;
+                int height = 50, maxRooms = 4, width = 50;
                 height += hero.Level * 3;
                 width += hero.Level * 3;
                 maxRooms += hero.Level;

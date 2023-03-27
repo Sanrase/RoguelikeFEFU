@@ -178,8 +178,9 @@ namespace RoguelikeFEFU
         public static void DynamicLine(Person hero, Enemy enemy, int damageGiven)
         {
             Console.SetCursorPosition(2, 21);
-
             Console.Write($"Вы нанесли врагу {enemy.Name} - {hero.Damage} урона. И получили в ответ {damageGiven} урона.");
+            Console.SetCursorPosition(2, 22);
+            Console.Write($"У врага {enemy.Name} осталось {enemy.Health} здоровья");
         }
 
         public static void DynamicLine(int coins, Person hero, Enemy enemy)

@@ -20,8 +20,8 @@ namespace RoguelikeFEFU
             MapGenerate map = new MapGenerate();
 
             map.GenerateMap();
-            enemies = map.GenerateEnemy();
             hero = map.GeneratePlayer();
+            enemies = map.GenerateEnemy(hero);
             teleporter = map.GenerateTeleporter();
             trader = map.GenerateTrader();
 
@@ -41,7 +41,7 @@ namespace RoguelikeFEFU
             List<Enemy> enemies;
             Trader trader;
             map.GenerateMap();
-            enemies = map.GenerateEnemy();
+            enemies = map.GenerateEnemy(hero);
             Interaction.SetPlayerNewLevel(hero, map);
             teleporter = map.GenerateTeleporter();
             trader = map.GenerateTrader();
