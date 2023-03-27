@@ -67,55 +67,55 @@ namespace RoguelikeFEFU
          {
 
              DrawNewGame();
-             string flag = "start";
-             while (true)
+             bool flag = true;
+             bool isBreak = true;
+             while (isBreak)
              {
                  ConsoleKeyInfo key = Console.ReadKey(true);
                  switch (key.Key)
                  {
                      case ConsoleKey.W:
-                         if (flag == "start")
+                         if (flag)
                          {
                              DrawExit();
-                             flag = "end";
+                             flag = false;
                          }
                          else
                          {
                              DrawNewGame();
-                             flag = "start";
+                             flag = true;
                          }
                          break;
                      case ConsoleKey.S:
-                         if (flag == "end")
+                         if (!flag)
                          {
                              DrawNewGame();
-                             flag = "start";
+                             flag = true;
                          }
                          else
                          {
                              DrawExit();
-                             flag = "end";
+                             flag = false;
                          }
                          break;
                      case ConsoleKey.Enter:
                          switch (flag)
                          {
-                             case "start":
+                             case true:
                                 Console.Clear();
                                 Game.Run();
                                 
                                 break;
-                             case "end":
-                                 goto while_end;
+                             case false:
+                                isBreak = false;
+                                break;
                          }
                          break;
                      default:
                          break;
                  }
              }
-             while_end:
-                Console.Clear();
-                Console.WriteLine("Иди нахуй");
+             Console.Clear();
          }
     }
 }
