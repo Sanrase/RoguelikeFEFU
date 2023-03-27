@@ -19,7 +19,7 @@ namespace RoguelikeFEFU
         private List<Enemy> enemies = new List<Enemy>();
         public Teleporter teleporter;
 
-        public MapGenerate(int width = 70, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 10)
+        public MapGenerate(int width = 80, int height = 50, int minRoomSize = 5, int maxRoomSize = 9, int maxRooms = 5)
         {
             Width = width;
             Height = height;
@@ -147,29 +147,34 @@ namespace RoguelikeFEFU
             }
         }
 
-        public List<Enemy> GenerateEnemy()
+        public List<Enemy> GenerateEnemy(Person hero)
         {
             Random rand = new Random();
 
             for(int i = 1; i < rooms.Count; i++)
             {
-                int countEnemyRoom = rand.Next(0, 3);
-                for (int j = 0; j < countEnemyRoom; j++)
+                int countEnemyRoom = rand.Next(1, 4);
+                if(new Random().Next(0, 5) != 0)
                 {
-                    int enemySpawnX = rand.Next(rooms[i].Left + 1, rooms[i].Right - 1);
-                    int enemySpawnY = rand.Next(rooms[i].Top + 1, rooms[i].Bottom - 1);
+                    for (int j = 0; j < countEnemyRoom; j++)
+                    {
+                        int enemySpawnX = rand.Next(rooms[i].Left + 1, rooms[i].Right - 1);
+                        int enemySpawnY = rand.Next(rooms[i].Top + 1, rooms[i].Bottom - 1);
 
-                    if (new Random().Next(0, 2) == 0)
-                    {
-                        Snake snake = new Snake(enemySpawnX, enemySpawnY, ConsoleColor.Green);
-                        enemies.Add(snake);
-                        map[enemySpawnX, enemySpawnY] = snake.Symbol;
-                    }
-                    else
-                    {
-                        Kobolt kobolt = new Kobolt(enemySpawnX, enemySpawnY, ConsoleColor.Cyan);
-                        enemies.Add(kobolt);
-                        map[enemySpawnX, enemySpawnY] = kobolt.Symbol;
+                        if (new Random().Next(0, 2) == 0)
+                        {
+                            Snake snake = new Snake(enemySpawnX, enemySpawnY, ConsoleColor.Green);
+                            snake.Health += hero.Damage / 2;
+                            enemies.Add(snake);
+                            map[enemySpawnX, enemySpawnY] = snake.Symbol;
+                        }
+                        else
+                        {
+                            Kobolt kobolt = new Kobolt(enemySpawnX, enemySpawnY, ConsoleColor.Cyan);
+                            kobolt.Health += hero.Damage / 2;
+                            enemies.Add(kobolt);
+                            map[enemySpawnX, enemySpawnY] = kobolt.Symbol;
+                        }
                     }
                 }
             }
