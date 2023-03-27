@@ -6,90 +6,116 @@ using System.Threading.Tasks;
 
 namespace RoguelikeFEFU
 {
-    internal class MainMenu
+    internal static class MainMenu
     {
 
-        static void DrawExit()
+        public static void DrawExit()
         {
+            int set_x = 40;
             Console.Clear();
-            Console.WriteLine("╔═══════════════════════════╗");
-            Console.WriteLine("║      ROGUELIKE GAME       ║");
-            Console.WriteLine("╠═══════════════════════════╣");
-            Console.WriteLine("║        Main Menu:         ║");
-            Console.WriteLine("║                           ║");
-            Console.WriteLine("║         New Game          ║");
-            Console.WriteLine("║    ╔═════════════════╗    ║");
-            Console.WriteLine("║    ║      Exit       ║    ║");
-            Console.WriteLine("║    ╚═════════════════╝    ║");
-            Console.WriteLine("╚═══════════════════════════╝");
+            Console.SetCursorPosition(set_x, 10);
+            Console.Write("╔═══════════════════════════╗");
+            Console.SetCursorPosition(set_x, 11);
+            Console.Write("║      ROGUELIKE GAME       ║");
+            Console.SetCursorPosition(set_x, 12);
+            Console.Write("╠═══════════════════════════╣");
+            Console.SetCursorPosition(set_x, 13);
+            Console.Write("║        Main Menu:         ║");
+            Console.SetCursorPosition(set_x, 14);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 15);
+            Console.Write("║         New Game          ║");
+            Console.SetCursorPosition(set_x, 16);
+            Console.Write("║    ╔═════════════════╗    ║");
+            Console.SetCursorPosition(set_x, 17);
+            Console.Write("║    ║      Exit       ║    ║");
+            Console.SetCursorPosition(set_x, 18);
+            Console.Write("║    ╚═════════════════╝    ║");
+            Console.SetCursorPosition(set_x, 19);
+            Console.Write("╚═══════════════════════════╝");
+            Console.SetCursorPosition(0, 0);
         }
 
-        static void DrawNewGame()
+        public static void DrawNewGame()
         {
+            int set_x = 40;
             Console.Clear();
-            Console.WriteLine("╔═══════════════════════════╗");
-            Console.WriteLine("║      ROGUELIKE GAME       ║");
-            Console.WriteLine("╠═══════════════════════════╣");
-            Console.WriteLine("║        Main Menu:         ║");
-            Console.WriteLine("║    ╔═════════════════╗    ║");
-            Console.WriteLine("║    ║    New Game     ║    ║");
-            Console.WriteLine("║    ╚═════════════════╝    ║");
-            Console.WriteLine("║           Exit            ║");
-            Console.WriteLine("║                           ║");
-            Console.WriteLine("╚═══════════════════════════╝");
+            Console.SetCursorPosition(set_x, 10);
+            Console.Write("╔═══════════════════════════╗");
+            Console.SetCursorPosition(set_x, 11);
+            Console.Write("║      ROGUELIKE GAME       ║");
+            Console.SetCursorPosition(set_x, 12);
+            Console.Write("╠═══════════════════════════╣");
+            Console.SetCursorPosition(set_x, 13);
+            Console.Write("║        Main Menu:         ║");
+            Console.SetCursorPosition(set_x, 14);
+            Console.Write("║    ╔═════════════════╗    ║");
+            Console.SetCursorPosition(set_x, 15);
+            Console.Write("║    ║    New Game     ║    ║");
+            Console.SetCursorPosition(set_x, 16);
+            Console.Write("║    ╚═════════════════╝    ║");
+            Console.SetCursorPosition(set_x, 17);
+            Console.Write("║           Exit            ║");
+            Console.SetCursorPosition(set_x, 18);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 19);
+            Console.Write("╚═══════════════════════════╝");
+            Console.SetCursorPosition(0, 0);
         }
 
-        static void Main(string[] args)
-        {
+        public static void MainMenuRun()
+         {
 
-            DrawNewGame();
-            string flag = "start";
-            while (true)
-            {
-                ConsoleKeyInfo key = Console.ReadKey();
-                switch (key.Key)
-                {
-                    case ConsoleKey.W:
-                        if (flag == "start")
-                        {
-                            DrawExit();
-                            flag = "end";
-                        }
-                        else
-                        {
-                            DrawNewGame();
-                            flag = "start";
-                        }
-                        break;
-                    case ConsoleKey.S:
-                        if (flag == "end")
-                        {
-                            DrawNewGame();
-                            flag = "start";
-                        }
-                        else
-                        {
-                            DrawExit();
-                            flag = "end";
-                        }
-                        break;
-                    case ConsoleKey.E:
-                        switch (flag)
-                        {
-                            case "start":
-                                //игра
+             DrawNewGame();
+             string flag = "start";
+             while (true)
+             {
+                 ConsoleKeyInfo key = Console.ReadKey(true);
+                 switch (key.Key)
+                 {
+                     case ConsoleKey.W:
+                         if (flag == "start")
+                         {
+                             DrawExit();
+                             flag = "end";
+                         }
+                         else
+                         {
+                             DrawNewGame();
+                             flag = "start";
+                         }
+                         break;
+                     case ConsoleKey.S:
+                         if (flag == "end")
+                         {
+                             DrawNewGame();
+                             flag = "start";
+                         }
+                         else
+                         {
+                             DrawExit();
+                             flag = "end";
+                         }
+                         break;
+                     case ConsoleKey.Enter:
+                         switch (flag)
+                         {
+                             case "start":
+                                Console.Clear();
+                                Game.Run();
+                                
                                 break;
-                            case "end":
-                                goto while_end;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-while_end:
-            Console.Clear();
-            Console.WriteLine("Иди нахуй");
-        }
+                             case "end":
+                                 goto while_end;
+                         }
+                         break;
+                     default:
+                         break;
+                 }
+             }
+             while_end:
+                Console.Clear();
+                Console.WriteLine("Иди нахуй");
+         }
     }
 }
