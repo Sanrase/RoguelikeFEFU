@@ -16,7 +16,7 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 10);
             Console.Write("╔═══════════════════════════╗");
             Console.SetCursorPosition(set_x, 11);
-            Console.Write("║      ROGUELIKE GAME       ║");
+            Console.Write("║       ROGUELIKE GAME      ║");
             Console.SetCursorPosition(set_x, 12);
             Console.Write("╠═══════════════════════════╣");
             Console.SetCursorPosition(set_x, 13);
@@ -26,12 +26,16 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 15);
             Console.Write("║         New Game          ║");
             Console.SetCursorPosition(set_x, 16);
-            Console.Write("║    ╔═════════════════╗    ║");
+            Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 17);
-            Console.Write("║    ║      Exit       ║    ║");
+            Console.Write("║         Settings          ║");
             Console.SetCursorPosition(set_x, 18);
-            Console.Write("║    ╚═════════════════╝    ║");
+            Console.Write("║    ╔═════════════════╗    ║");
             Console.SetCursorPosition(set_x, 19);
+            Console.Write("║    ║      Exit       ║    ║");
+            Console.SetCursorPosition(set_x, 20);
+            Console.Write("║    ╚═════════════════╝    ║");
+            Console.SetCursorPosition(set_x, 21);
             Console.Write("╚═══════════════════════════╝");
             Console.SetCursorPosition(0, 0);
         }
@@ -43,7 +47,7 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 10);
             Console.Write("╔═══════════════════════════╗");
             Console.SetCursorPosition(set_x, 11);
-            Console.Write("║      ROGUELIKE GAME       ║");
+            Console.Write("║       ROGUELIKE GAME      ║");
             Console.SetCursorPosition(set_x, 12);
             Console.Write("╠═══════════════════════════╣");
             Console.SetCursorPosition(set_x, 13);
@@ -55,66 +59,107 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 16);
             Console.Write("║    ╚═════════════════╝    ║");
             Console.SetCursorPosition(set_x, 17);
-            Console.Write("║           Exit            ║");
+            Console.Write("║         Settings          ║");
             Console.SetCursorPosition(set_x, 18);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 19);
+            Console.Write("║           Exit            ║");
+            Console.SetCursorPosition(set_x, 20);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 21);
+            Console.Write("╚═══════════════════════════╝");
+            Console.SetCursorPosition(0, 0);
+        }
+
+        public static void DrawSettings()
+        {
+            int set_x = 40;
+            Console.Clear();
+            Console.SetCursorPosition(set_x, 10);
+            Console.Write("╔═══════════════════════════╗");
+            Console.SetCursorPosition(set_x, 11);
+            Console.Write("║       ROGUELIKE GAME      ║");
+            Console.SetCursorPosition(set_x, 12);
+            Console.Write("╠═══════════════════════════╣");
+            Console.SetCursorPosition(set_x, 13);
+            Console.Write("║        Main Menu:         ║");
+            Console.SetCursorPosition(set_x, 14);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 15);
+            Console.Write("║         New Game          ║");
+            Console.SetCursorPosition(set_x, 16);
+            Console.Write("║    ╔═════════════════╗    ║");
+            Console.SetCursorPosition(set_x, 17);
+            Console.Write("║    ║    Settings     ║    ║");
+            Console.SetCursorPosition(set_x, 18);
+            Console.Write("║    ╚═════════════════╝    ║");
+            Console.SetCursorPosition(set_x, 19);
+            Console.Write("║           Exit            ║");
+            Console.SetCursorPosition(set_x, 20);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 21);
             Console.Write("╚═══════════════════════════╝");
             Console.SetCursorPosition(0, 0);
         }
 
         public static void MainMenuRun()
          {
-
-             DrawNewGame();
-             bool flag = true;
-             bool isBreak = true;
-             while (isBreak)
-             {
-                 ConsoleKeyInfo key = Console.ReadKey(true);
-                 switch (key.Key)
-                 {
-                     case ConsoleKey.W:
-                         if (flag)
-                         {
-                             DrawExit();
-                             flag = false;
-                         }
-                         else
-                         {
-                             DrawNewGame();
-                             flag = true;
-                         }
-                         break;
-                     case ConsoleKey.S:
-                         if (!flag)
-                         {
-                             DrawNewGame();
-                             flag = true;
-                         }
-                         else
-                         {
-                             DrawExit();
-                             flag = false;
-                         }
-                         break;
-                     case ConsoleKey.Enter:
-                         switch (flag)
-                         {
-                             case true:
+            DrawNewGame();
+            bool isBreak = true;
+            int count = 0;
+            while (isBreak)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.W:
+                        if (count > 0) { count--; }
+                        switch (count)
+                        {
+                            case 0:
+                                DrawNewGame();
+                                break;
+                            case 1:
+                                DrawSettings();
+                                break;
+                            case 2:
+                                DrawExit();
+                                break;
+                        }
+                        break;
+                    case ConsoleKey.S:
+                        if (count < 2) { count++; }
+                        switch (count)
+                        {
+                            case 0:
+                                DrawNewGame();
+                                break;
+                            case 1:
+                                DrawSettings();
+                                break;
+                            case 2:
+                                DrawExit();
+                                break;
+                        }
+                        break;
+                    case ConsoleKey.Enter:
+                        switch (count)
+                        {
+                            case 0:
                                 Console.Clear();
                                 Game.Run();
-                                
                                 break;
-                             case false:
+                            case 1:
+                                break;
+                            case 2:
                                 isBreak = false;
                                 break;
-                         }
-                         break;
-                     default:
-                         break;
-                 }
-             }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
              Console.Clear();
          }
     }
