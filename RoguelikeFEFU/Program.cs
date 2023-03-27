@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace RoguelikeFEFU
 {
@@ -10,7 +11,9 @@ namespace RoguelikeFEFU
     {
         public static void Main(string[] args)
         {
-            MainMenu.MainMenuRun();
+            Settings settings = new Settings();
+            
+            MainMenu.MainMenuRun(settings);
         }
     }
 }

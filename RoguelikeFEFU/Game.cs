@@ -11,13 +11,13 @@ namespace RoguelikeFEFU
 {
     internal static class Game
     {
-        public static void Run()
+        public static void Run(Settings settings)
         {
             Person hero;
             List<Enemy> enemies;
             Teleporter teleporter;
             Trader trader;
-            MapGenerate map = new MapGenerate();
+            MapGenerate map = new MapGenerate(settings);
 
             map.GenerateMap();
             hero = map.GeneratePlayer();
@@ -29,13 +29,13 @@ namespace RoguelikeFEFU
 
             while (true)
             {
-                Update(hero, enemies, map, coords, teleporter, trader);
+                Update(settings, hero, enemies, map, coords, teleporter, trader);
             }
 
 
         }
 
-        public static void Run(Person hero, MapGenerate map)
+        public static void Run(Person hero, MapGenerate map, Settings settings)
         {
             Teleporter teleporter;
             List<Enemy> enemies;
@@ -51,7 +51,7 @@ namespace RoguelikeFEFU
 
             while (true)
             {
-                Update(hero, enemies, map, coords, teleporter, trader);
+                Update(settings, hero, enemies, map, coords, teleporter, trader);
             }
         }
 
@@ -60,15 +60,15 @@ namespace RoguelikeFEFU
         {
             map.PrintDungeon(hero, teleporter, trader);
         }
-        public static void Update(Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords, Teleporter teleporter, Trader trader)
+        public static void Update(Settings settings, Person hero, List<Enemy> enemies, MapGenerate map, int[,] coords, Teleporter teleporter, Trader trader)
         {
             Draw(map, hero, teleporter, trader);
             Interface.DynamicStatistics(hero, coords);
-            CheckButton(hero, enemies, map, teleporter, trader);
+            CheckButton(settings, hero, enemies, map, teleporter, trader);
             map.EnemiesMovement(enemies);
         }
 
-        public static void CheckButton(Person hero, List<Enemy> enemies, MapGenerate generateMap, Teleporter teleporter, Trader trader)
+        public static void CheckButton(Settings settings, Person hero, List<Enemy> enemies, MapGenerate generateMap, Teleporter teleporter, Trader trader)
         {
             ConsoleKey keyInfo = Console.ReadKey(true).Key;
             if(keyInfo == ConsoleKey.E)
@@ -90,7 +90,7 @@ namespace RoguelikeFEFU
             else if(keyInfo == ConsoleKey.T)
             {
                 Interface.ClearDynamicLine();
-                Interaction.PlayerTeleport(hero, teleporter);
+                Interaction.PlayerTeleport(settings, hero, teleporter);
             }
             else if (keyInfo == ConsoleKey.M)
             {

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using static Lucene.Net.Search.FieldValueHitQueue;
 
 namespace RoguelikeFEFU
 {
@@ -40,19 +39,18 @@ namespace RoguelikeFEFU
             }
         }
 
-        public static void PlayerTeleport(Person hero, Teleporter teleporter)
+        public static void PlayerTeleport(Settings settings, Person hero, Teleporter teleporter)
         {
             if (RadiusTeleport(hero, teleporter))
             {
                 Console.Clear();
+                settings.Width += hero.Level * 3;
+                settings.Height += hero.Level * 3;
+                settings.CountRooms += 1;
                 hero.Level += 1;
-                int height = 50, maxRooms = 4, width = 50;
-                height += hero.Level * 3;
-                width += hero.Level * 3;
-                maxRooms += hero.Level;
-                MapGenerate genMap = new MapGenerate(width, height, 5, 9, maxRooms);
+                MapGenerate genMap = new MapGenerate(settings, 5, 9);
 
-                Game.Run(hero, genMap);
+                Game.Run(hero, genMap, settings);
             }
         }
 

@@ -60,11 +60,14 @@ namespace RoguelikeFEFU
         public int Coins { get; set; }
         public int Level { get; set; }
 
+        public string Name { get; set; }
+
         protected int[] inventory = new int[5];
         public char Symbol { get; set; }
-        public Person(int x, int y, ConsoleColor color) : base(x, y, color)
+        public Person(int x, int y, ConsoleColor color, char symbol = '@', string name = "Ace") : base(x, y, color)
         {
-            Symbol = '@';
+            Symbol = symbol;
+            Name = name;
             Potion = 3;
             Coins = 0;
             Level = 1;
@@ -74,10 +77,10 @@ namespace RoguelikeFEFU
 
         public void Heal()
         {
-            if (this.Potion > 0)
+            if (Potion > 0)
             {
-                this.Health = 10;
-                this.Potion -= 1;
+                Health = 10;
+                Potion -= 1;
             }
         }
     }
@@ -97,17 +100,17 @@ namespace RoguelikeFEFU
 
     }
 
-    internal class Kobolt : Enemy
+    internal class Kobalt : Enemy
     {
         
-        public Kobolt(int x, int y, ConsoleColor color) : base (x, y, color)
+        public Kobalt(int x, int y, ConsoleColor color) : base (x, y, color)
         {
             Symbol = 'K';
             Health = 7;
             Damage = 1;
             MaxCoin = 7;
             MinCoin = 3;
-            Name = "Kobolt";
+            Name = "Kobalt";
         }
     }
 
