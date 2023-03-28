@@ -248,16 +248,16 @@ namespace RoguelikeFEFU
                 switch (enemyMoveSide)
                 {
                     case 0:
-                        this.SetEnemyPosition(x, y - 1, enemy);
+                        this.SetEnemyPosition(x, y - 1, enemy, settings);
                         break;
                     case 1:
-                        this.SetEnemyPosition(x - 1, y, enemy);
+                        this.SetEnemyPosition(x - 1, y, enemy, settings);
                         break;
                     case 2:
-                        this.SetEnemyPosition(x, y + 1, enemy);
+                        this.SetEnemyPosition(x, y + 1, enemy, settings);
                         break;
                     case 3:
-                        this.SetEnemyPosition(x + 1, y, enemy);
+                        this.SetEnemyPosition(x + 1, y, enemy, settings);
                         break;
 
                 }
@@ -265,10 +265,10 @@ namespace RoguelikeFEFU
             }
         }
 
-        private void SetEnemyPosition(int x, int y, Enemy enemy)
+        private void SetEnemyPosition(int x, int y, Enemy enemy, Settings settings)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K'
-                || map[x, y] == 'T' || map[x, y] == '*' || map[x, y] == 'B')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == settings.snakeSymbol || map[x, y] == settings.PlayerSymbol || map[x, y] == '+' || map[x, y] == settings.kobaltSymbol
+                || map[x, y] == 'T' || map[x, y] == '*' || map[x, y] == settings.boosSymbol)
             {
                 return;
             }
@@ -282,7 +282,7 @@ namespace RoguelikeFEFU
         }
         char current = '.';
 
-        public void PlayerMovement(Person hero, ConsoleKey key)
+        public void PlayerMovement(Person hero, ConsoleKey key, Settings settings)
         {
             int x = hero.X;
             int y = hero.Y;
@@ -291,23 +291,23 @@ namespace RoguelikeFEFU
             switch (key)
             {
                 case ConsoleKey.W:
-                    current = SetPlayerPosition(x, y - 1, current, hero);
+                    current = SetPlayerPosition(x, y - 1, current, hero, settings);
                     break;
                 case ConsoleKey.A:
-                    current = SetPlayerPosition(x - 1, y, current, hero);
+                    current = SetPlayerPosition(x - 1, y, current, hero, settings);
                     break;
                 case ConsoleKey.S:
-                    current = SetPlayerPosition(x, y + 1, current, hero);
+                    current = SetPlayerPosition(x, y + 1, current, hero, settings);
                     break;
                 case ConsoleKey.D:
-                    current = SetPlayerPosition(x + 1, y, current, hero);
+                    current = SetPlayerPosition(x + 1, y, current, hero, settings);
                     break;
             }
         }
 
-        private char SetPlayerPosition(int x, int y, char current, Person hero)
+        private char SetPlayerPosition(int x, int y, char current, Person hero, Settings settings)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == 'K' || map[x, y] == 'B')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == settings.snakeSymbol || map[x, y] == settings.kobaltSymbol || map[x, y] == settings.boosSymbol)
             {
                 return current;
             }

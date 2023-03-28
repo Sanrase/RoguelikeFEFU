@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Security.Authentication;
 using System.Text;
@@ -19,6 +20,10 @@ namespace RoguelikeFEFU
         public int maxHeight = 100;
         public int maxRooms = 20;
         public int minRooms = 4;
+
+        public char snakeSymbol = 'S';
+        public char kobaltSymbol = 'K';
+        public char boosSymbol = 'B';
 
         public string PlayerName { get; set; }
         public ConsoleColor PlayerColor { get; set; }

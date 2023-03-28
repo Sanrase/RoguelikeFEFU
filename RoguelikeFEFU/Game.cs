@@ -96,7 +96,7 @@ namespace RoguelikeFEFU
             else if (keyInfo == ConsoleKey.W || keyInfo == ConsoleKey.A || keyInfo == ConsoleKey.S || keyInfo == ConsoleKey.D)
             {
                 Interface.ClearDynamicLine();
-                generateMap.PlayerMovement(hero, keyInfo);
+                generateMap.PlayerMovement(hero, keyInfo, settings);
             }
             else if (keyInfo == ConsoleKey.H)
             {
