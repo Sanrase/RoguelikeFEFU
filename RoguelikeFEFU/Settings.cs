@@ -43,7 +43,7 @@ namespace RoguelikeFEFU
             Height = 50;
             CountRooms = 5;
             PlayerNames = new string[10] {"Ace", "Ben", "Cat", "Dan", "Eve", "Fox", "Gus", "Ivy", "Jay", "Kit" };
-            PlayerSymbols = new char[6] { '@', 'Q', '&', 'P', 'T', 'E'};
+            PlayerSymbols = new char[6] { '@', 'Q', '&', 'P', 'G', 'E'};
         }
     }
 }

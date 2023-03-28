@@ -10,7 +10,7 @@ namespace RoguelikeFEFU
 {
     internal static class Interaction
     {
-        public static void PlayerAttack(Person hero, List<Enemy> enemies, char[,] map)
+        public static void PlayerAttack(ref bool gameRun, Person hero, List<Enemy> enemies, char[,] map)
         {
             Enemy enemy = SearchPlayerAttack(hero, enemies);
             
@@ -26,11 +26,11 @@ namespace RoguelikeFEFU
                 {
                     hero.Defense(enemy.Damage);
                     Interface.DynamicLine(hero, enemy, enemy.Damage);
-                }
-                if (!hero.IsAlive)
-                {
-                    DeadPlayer(hero);
-                    return;
+                    if (!hero.IsAlive)
+                    {
+                        DeadPlayer(hero, ref gameRun);
+                        return;
+                    }
                 }
             }
             else
@@ -39,18 +39,30 @@ namespace RoguelikeFEFU
             }
         }
 
-        public static void PlayerTeleport(Settings settings, Person hero, Teleporter teleporter)
+        public static void PlayerTeleport(Settings settings, Person hero, Teleporter teleporter, ref bool gameRun, ref bool isTeleport)
         {
-            if (RadiusTeleport(hero, teleporter))
+            if (!isTeleport)
             {
-                Console.Clear();
-                settings.Width += hero.Level * 3;
-                settings.Height += hero.Level * 3;
-                settings.CountRooms += 1;
-                hero.Level += 1;
-                MapGenerate genMap = new MapGenerate(settings, 5, 9);
+                if (RadiusTeleport(hero, teleporter))
+                {
+                    gameRun = false;
+                    isTeleport = true;
+                }
+            }
+            else
+            {
+                if(RadiusTeleport(hero, teleporter))
+                {
+                    Console.Clear();
+                    settings.Width += hero.Level * 3;
+                    settings.Height += hero.Level * 3;
+                    settings.CountRooms += 1;
+                    hero.Level += 1;
+                    MapGenerate genMap = new MapGenerate(settings, 5, 9);
+                    
+                    Game.Run(hero, genMap, settings);
 
-                Game.Run(hero, genMap, settings);
+                }
             }
         }
 
@@ -162,9 +174,9 @@ namespace RoguelikeFEFU
             Interface.DynamicLine(coins, hero, enemy);
         }
 
-        private static void DeadPlayer(Person hero)
+        private static void DeadPlayer(Person hero, ref bool gameRun)
         {
-
+            Game.GameOver(hero, ref gameRun);
         }
     }
 }

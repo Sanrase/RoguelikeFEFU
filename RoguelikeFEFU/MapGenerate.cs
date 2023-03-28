@@ -11,10 +11,10 @@ namespace RoguelikeFEFU
     {
         public int Width { get; set; }
         public int Height { get; set; }
-        private int minRoomSize; 
-        private int maxRoomSize; 
+        private int minRoomSize;
+        private int maxRoomSize;
         private int maxRooms;
-        public List<Rectangle> rooms = new List<Rectangle>(); 
+        public List<Rectangle> rooms = new List<Rectangle>();
         private char[,] map;
         private List<Enemy> enemies = new List<Enemy>();
         public Teleporter teleporter;
@@ -33,9 +33,9 @@ namespace RoguelikeFEFU
 
         private void FillMap()
         {
-            for(int x = 0; x < Width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for(int y = 0; y < Height; y++)
+                for (int y = 0; y < Height; y++)
                 {
                     map[x, y] = ' ';
                 }
@@ -53,7 +53,7 @@ namespace RoguelikeFEFU
             {
                 int roomWidth = rand.Next(minRoomSize, maxRoomSize + 1);
                 int roomHeight = rand.Next(minRoomSize, maxRoomSize + 1);
-                int roomX = rand.Next(1, Width - roomWidth - 1); 
+                int roomX = rand.Next(1, Width - roomWidth - 1);
                 int roomY = rand.Next(1, Height - roomHeight - 1);
 
                 Rectangle newRoom = new Rectangle(roomX, roomY, roomWidth, roomHeight);
@@ -153,10 +153,10 @@ namespace RoguelikeFEFU
         {
             Random rand = new Random();
 
-            for(int i = 1; i < rooms.Count; i++)
+            for (int i = 1; i < rooms.Count-1; i++)
             {
                 int countEnemyRoom = rand.Next(1, 4);
-                if(new Random().Next(0, 5) != 0)
+                if (new Random().Next(0, 5) != 0)
                 {
                     for (int j = 0; j < countEnemyRoom; j++)
                     {
@@ -181,9 +181,19 @@ namespace RoguelikeFEFU
                 }
             }
 
+            if (hero.Level % 1 == 0)
+            {
+                int enemySpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
+                int enemySpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
+
+                Boss boss = new Boss(enemySpawnX, enemySpawnY, settings.ColorBoss);
+                enemies.Add(boss);
+                map[enemySpawnX, enemySpawnY] = boss.Symbol;
+            }
+
             return enemies;
         }
-        
+
         public Person GeneratePlayer()
         {
             Person hero;
@@ -228,14 +238,14 @@ namespace RoguelikeFEFU
         {
             Random rand = new Random();
 
-            foreach(Enemy enemy in enemies)
+            foreach (Enemy enemy in enemies)
             {
                 int x = enemy.X;
                 int y = enemy.Y;
 
                 int enemyMoveSide = rand.Next(0, 4);
 
-                switch(enemyMoveSide)
+                switch (enemyMoveSide)
                 {
                     case 0:
                         this.SetEnemyPosition(x, y - 1, enemy);
@@ -251,14 +261,14 @@ namespace RoguelikeFEFU
                         break;
 
                 }
-                
+
             }
         }
 
         private void SetEnemyPosition(int x, int y, Enemy enemy)
         {
-            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K' 
-                || map[x, y] == 'T' || map[x, y] == '*')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == '@' || map[x, y] == '+' || map[x, y] == 'K'
+                || map[x, y] == 'T' || map[x, y] == '*' || map[x, y] == 'B')
             {
                 return;
             }
@@ -276,7 +286,7 @@ namespace RoguelikeFEFU
         {
             int x = hero.X;
             int y = hero.Y;
-            
+
 
             switch (key)
             {
@@ -297,7 +307,7 @@ namespace RoguelikeFEFU
 
         private char SetPlayerPosition(int x, int y, char current, Person hero)
         {
-            if (map[x,y] == '#' || map[x,y] == ' ' || map[x,y] == 'S' || map[x, y] == 'K')
+            if (map[x, y] == '#' || map[x, y] == ' ' || map[x, y] == 'S' || map[x, y] == 'K' || map[x, y] == 'B')
             {
                 return current;
             }

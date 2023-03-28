@@ -237,10 +237,39 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(4, 22);
             Console.Write("Чтобы купить зелье здоровья нажмите (H).");
             Console.SetCursorPosition(4, 23);
-            Console.Write("Если хотите улучшить свой мечь нажмите (D).");
+            Console.Write("Если хотите улучшить свой меч нажмите (D).");
             Console.SetCursorPosition(4, 24);
             Console.Write("чтобы выйти из лавки нажмите (E).");
             Console.SetCursorPosition(0, 0);
+        }
+
+        private static void GameOverStatistic(Person hero)
+        {
+            Console.SetCursorPosition(35, 9);
+            Console.Write("╔═════════════════╗");
+            Console.SetCursorPosition(35, 10);
+            Console.Write("║    GAME OVER    ║");
+            Console.SetCursorPosition(35, 11);
+            Console.Write("╚═════════════════╝");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.SetCursorPosition(35, 13);
+            Console.Write("     Статистика");
+            Console.ResetColor();
+            Console.SetCursorPosition(35, 15);
+            Console.Write($"   Имя: {hero.Name}");
+            Console.SetCursorPosition(35, 17);
+            Console.Write($"   Уровень карты: {hero.Level}");
+            Console.SetCursorPosition(35, 19);
+            Console.Write($"   Убийств: {hero.Kills}");
+            Console.SetCursorPosition(0, 0);
+        }
+
+        public static void GameOver(Person hero)
+        {
+            Console.Clear();
+            DrawBox(30, 8, 30, 15);
+
+            GameOverStatistic(hero);
         }
     }
 }
