@@ -25,6 +25,21 @@ namespace RoguelikeFEFU
                 settings = new Settings();
             }
 
+            Record record;
+            fullPath = Path.GetFullPath("RecordGame.json");
+
+
+            if (File.Exists(fullPath))
+            {
+                string json = File.ReadAllText(fullPath);
+                record = JsonConvert.DeserializeObject<Record>(json);
+            }
+            else
+            {
+                record = new Record();
+                File.WriteAllText(fullPath, JsonConvert.SerializeObject(record));
+            }
+
             if (settings != null)
             {
                 MainMenu.MainMenuRun(settings);

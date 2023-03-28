@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 
 namespace RoguelikeFEFU
 {
@@ -80,7 +81,7 @@ namespace RoguelikeFEFU
             }
         }
 
-        public static void MainMenuRun(Settings settings)
+       public static void MainMenuRun(Settings settings)
         {
             DrawNewGame();
             bool isBreak = true;
@@ -101,12 +102,15 @@ namespace RoguelikeFEFU
                                 DrawMenuSettings();
                                 break;
                             case 2:
+                                DrawMenuRecord();
+                                break;
+                            case 3:
                                 DrawExit();
                                 break;
                         }
                         break;
                     case ConsoleKey.S:
-                        if (count < 2) { count++; }
+                        if (count < 3) { count++; }
                         switch (count)
                         {
                             case 0:
@@ -116,6 +120,9 @@ namespace RoguelikeFEFU
                                 DrawMenuSettings();
                                 break;
                             case 2:
+                                DrawMenuRecord();
+                                break;
+                            case 3:
                                 DrawExit();
                                 break;
                         }
@@ -458,6 +465,34 @@ namespace RoguelikeFEFU
 
                                 break;
                             case 2:
+                                Record record;
+                                fullPath = Path.GetFullPath("RecordGame.json");
+
+                                if (File.Exists(fullPath))
+                                {
+                                    string json = File.ReadAllText(fullPath);
+                                    record = JsonConvert.DeserializeObject<Record>(json);
+                                }
+                                else
+                                {
+                                    record = new Record();
+                                }
+
+                                if(record != null)
+                                {
+                                    DrawRecord(record);
+                                    ConsoleKey keyInfo = Console.ReadKey(true).Key;
+
+                                    switch(keyInfo)
+                                    {
+                                        default:
+                                            break;
+                                    }
+                                }
+                                count = 2;
+                                DrawMenuRecord();
+                                break;
+                            case 3:
                                 isBreak = false;
                                 break;
                         }
@@ -620,12 +655,16 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 17);
             Console.Write("║         Settings          ║");
             Console.SetCursorPosition(set_x, 18);
-            Console.Write("║    ╔═════════════════╗    ║");
+            Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 19);
-            Console.Write("║    ║      Exit       ║    ║");
+            Console.Write("║          Record           ║");
             Console.SetCursorPosition(set_x, 20);
-            Console.Write("║    ╚═════════════════╝    ║");
+            Console.Write("║    ╔═════════════════╗    ║");
             Console.SetCursorPosition(set_x, 21);
+            Console.Write("║    ║      Exit       ║    ║");
+            Console.SetCursorPosition(set_x, 22);
+            Console.Write("║    ╚═════════════════╝    ║");
+            Console.SetCursorPosition(set_x, 23);
             Console.Write("╚═══════════════════════════╝");
             Console.SetCursorPosition(0, 0);
         }
@@ -653,10 +692,14 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 18);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 19);
-            Console.Write("║           Exit            ║");
+            Console.Write("║          Record           ║");
             Console.SetCursorPosition(set_x, 20);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 21);
+            Console.Write("║           Exit            ║");
+            Console.SetCursorPosition(set_x, 22);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 23);
             Console.Write("╚═══════════════════════════╝");
             Console.SetCursorPosition(0, 0);
         }
@@ -684,10 +727,49 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 18);
             Console.Write("║    ╚═════════════════╝    ║");
             Console.SetCursorPosition(set_x, 19);
-            Console.Write("║           Exit            ║");
+            Console.Write("║          Record           ║");
             Console.SetCursorPosition(set_x, 20);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 21);
+            Console.Write("║           Exit            ║");
+            Console.SetCursorPosition(set_x, 22);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 23);
+            Console.Write("╚═══════════════════════════╝");
+            Console.SetCursorPosition(0, 0);
+        }
+
+        private static void DrawMenuRecord()
+        {
+            int set_x = 40;
+            Console.Clear();
+            Console.SetCursorPosition(set_x, 10);
+            Console.Write("╔═══════════════════════════╗");
+            Console.SetCursorPosition(set_x, 11);
+            Console.Write("║       ROGUELIKE GAME      ║");
+            Console.SetCursorPosition(set_x, 12);
+            Console.Write("╠═══════════════════════════╣");
+            Console.SetCursorPosition(set_x, 13);
+            Console.Write("║        Main Menu:         ║");
+            Console.SetCursorPosition(set_x, 14);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 15);
+            Console.Write("║         New Game          ║");
+            Console.SetCursorPosition(set_x, 16);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 17);
+            Console.Write("║         Settings          ║");
+            Console.SetCursorPosition(set_x, 18);
+            Console.Write("║    ╔═════════════════╗    ║");
+            Console.SetCursorPosition(set_x, 19);
+            Console.Write("║    ║     Record      ║    ║");
+            Console.SetCursorPosition(set_x, 20);
+            Console.Write("║    ╚═════════════════╝    ║");
+            Console.SetCursorPosition(set_x, 21);
+            Console.Write("║           Exit            ║");
+            Console.SetCursorPosition(set_x, 22);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 23);
             Console.Write("╚═══════════════════════════╝");
             Console.SetCursorPosition(0, 0);
         }
@@ -1065,12 +1147,46 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 18);
             Console.Write("║    ╔═════════════════╗    ║");
             Console.SetCursorPosition(set_x, 19);
-            Console.Write("║    ║      Exit       ║    ║");
+            Console.Write("║    ║   Close Game    ║    ║");
             Console.SetCursorPosition(set_x, 20);
             Console.Write("║    ╚═════════════════╝    ║");
             Console.SetCursorPosition(set_x, 21);
             Console.Write("╚═══════════════════════════╝");
             Console.SetCursorPosition(0, 0);
+        }
+
+        private static void DrawRecord(Record record)
+        {
+            int set_x = 40;
+            Console.Clear();
+            Console.SetCursorPosition(set_x, 10);
+            Console.Write("╔═══════════════════════════╗");
+            Console.SetCursorPosition(set_x, 11);
+            Console.Write("║          Record           ║");
+            Console.SetCursorPosition(set_x, 12); 
+            Console.Write("╠═══════════════════════════╣");
+            Console.SetCursorPosition(set_x, 13);
+            Console.Write("║          Name:            ║");
+            Console.SetCursorPosition(set_x, 14);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 15);
+            Console.Write("║          MapLevel:        ║");
+            Console.SetCursorPosition(set_x, 16);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 17);
+            Console.Write("║          Kills:           ║");
+            Console.SetCursorPosition(set_x, 18);
+            Console.Write("║                           ║");
+            Console.SetCursorPosition(set_x, 19);
+            Console.Write("╚═══════════════════════════╝");
+            Console.SetCursorPosition(57, 13);
+            Console.Write(record.Name);
+            Console.SetCursorPosition(61, 15);
+            Console.Write(record.Level);
+            Console.SetCursorPosition(58, 17);
+            Console.Write(record.CountKills);
+            Console.SetCursorPosition(0, 0);
+
         }
 
         private static void DrawMenuInGameContinue()
@@ -1096,7 +1212,7 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 18);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 19);
-            Console.Write("║           Exit            ║");
+            Console.Write("║        Close Game         ║");
             Console.SetCursorPosition(set_x, 20);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 21);
@@ -1127,7 +1243,7 @@ namespace RoguelikeFEFU
             Console.SetCursorPosition(set_x, 18);
             Console.Write("║    ╚═════════════════╝    ║");
             Console.SetCursorPosition(set_x, 19);
-            Console.Write("║           Exit            ║");
+            Console.Write("║        Close Game         ║");
             Console.SetCursorPosition(set_x, 20);
             Console.Write("║                           ║");
             Console.SetCursorPosition(set_x, 21);

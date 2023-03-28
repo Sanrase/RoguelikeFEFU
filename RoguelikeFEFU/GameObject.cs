@@ -152,6 +152,17 @@ namespace RoguelikeFEFU
         }
     }
 
+    internal class Boss : Enemy
+    {
+        private bool bossIsAllive = true;
+        public Boss(int x, int y, ConsoleColor color) : base(x, y, color)
+        {
+            Health = 20;
+            Damage = 4;
+            Symbol = 'B';
+        }
+    }
+
     internal class Teleporter : Entity
     {
         public char Symbol { get; set; }
