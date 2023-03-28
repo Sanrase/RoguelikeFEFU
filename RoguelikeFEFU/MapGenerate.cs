@@ -181,7 +181,7 @@ namespace RoguelikeFEFU
                 }
             }
 
-            if (hero.Level % 1 == 0)
+            if (hero.Level % 3 == 0)
             {
                 int enemySpawnX = rand.Next(rooms[rooms.Count - 1].Left + 1, rooms[rooms.Count - 1].Right - 1);
                 int enemySpawnY = rand.Next(rooms[rooms.Count - 1].Top + 1, rooms[rooms.Count - 1].Bottom - 1);
